@@ -1,4 +1,3 @@
-// crud.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -91,50 +90,186 @@ function eliminar(tabla, id) {
 
 
 
+
+
+
+
+
 // Ruta para crear producto
 // routes/crud.js (modifica la ruta POST)
+
+// Ruta para obtener el historial de ventas con filtros de fecha
+router.get('/ventas/historial', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const { fechaInicio, fechaFin } = req.query;
+
+    let query = `
+          SELECT 
+              v.*, 
+              p.fecha_pedido, 
+              p.direccion_envio, 
+              p.metodo_pago,
+              u.nombre AS usuario_nombre
+          FROM ventas v
+          JOIN pedidos p ON v.pedido_id = p.id
+          JOIN usuarios u ON p.usuario_id = u.id
+          WHERE 1=1
+      `;
+    const params = [];
+
+    if (fechaInicio && fechaFin) {
+      query += ' AND p.fecha_pedido BETWEEN ? AND ?';
+      params.push(fechaInicio, fechaFin + ' 23:59:59');
+    }
+
+    const [ventas] = await conexion.promise().query(query, params);
+
+    // Obtener detalles de cada venta
+    for (const venta of ventas) {
+      const [detalles] = await conexion.promise().query(
+        'SELECT producto_nombre, cantidad, precio_unitario FROM detalle_pedidos WHERE pedido_id = ?',
+        [venta.pedido_id]
+      );
+      venta.productos = detalles;
+    }
+
+    console.log('Ventas obtenidas:', JSON.stringify(ventas, null, 2));
+
+    res.json(ventas);
+  } catch (error) {
+    console.error('Error al obtener historial de ventas:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+// Ruta para obtener productos más vendidos
+// En tu ruta del backend (crud.js)
+router.get('/ventas/productos-mas-vendidos', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const { periodo, fechaInicio, fechaFin } = req.query;
+
+    // Validar parámetros de fecha
+    let fechaInicioQuery = '1900-01-01';
+    let fechaFinQuery = '2100-01-01';
+
+    if (fechaInicio && fechaFin) {
+      fechaInicioQuery = fechaInicio;
+      fechaFinQuery = fechaFin;
+    } else if (periodo) {
+      const fechaActual = new Date();
+      switch (periodo) {
+        case 'mes':
+          fechaInicioQuery = new Date(fechaActual.setMonth(fechaActual.getMonth() - 1)).toISOString().split('T')[0];
+          break;
+        case 'trimestre':
+          fechaInicioQuery = new Date(fechaActual.setMonth(fechaActual.getMonth() - 3)).toISOString().split('T')[0];
+          break;
+        case 'semestre':
+          fechaInicioQuery = new Date(fechaActual.setMonth(fechaActual.getMonth() - 6)).toISOString().split('T')[0];
+          break;
+        case 'anio':
+          fechaInicioQuery = new Date(fechaActual.setFullYear(fechaActual.getFullYear() - 1)).toISOString().split('T')[0];
+          break;
+      }
+      fechaFinQuery = new Date().toISOString().split('T')[0];
+    }
+
+    const query = `
+  SELECT 
+    dp.producto_id,
+    dp.producto_nombre,
+    SUM(dp.cantidad) AS total_vendido,
+    p.imagen,
+    p.precio,
+    p.descripcion,
+    MAX(pe.fecha_pedido) AS fecha_ultima_venta
+  FROM detalle_pedidos dp
+  JOIN pedidos pe ON dp.pedido_id = pe.id
+  JOIN productos p ON dp.producto_id = p.id
+  WHERE pe.fecha_pedido BETWEEN ? AND ?
+  GROUP BY 
+    dp.producto_id, 
+    dp.producto_nombre, 
+    p.imagen, 
+    p.precio, 
+    p.descripcion
+  ORDER BY total_vendido DESC
+  LIMIT 10
+`;
+
+
+
+    const [resultados] = await conexion.promise().query(query,
+      [`${fechaInicioQuery} 00:00:00`, `${fechaFinQuery} 23:59:59`]);
+
+    res.json(resultados);
+
+  } catch (error) {
+    console.error('Error en backend:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Ruta para crear producto
 router.post('/productos', verifyToken, isAdmin, upload.single('imagen'), (req, res) => {
   console.log('Archivo recibido:', req.file);
   console.log('Datos recibidos:', req.body);
-  
+
   const categoriasPermitidas = [
-      'bicicletas',
-      'ropa_deportiva', 
-      'equipamiento',
-      'suplementos',
-      'accesorios'
+    'bicicletas',
+    'accesorios',
+    'repuestos',
+    'ropa'
   ];
 
-  if (!categoriasPermitidas.includes(req.body.categoria)) {
+  const categoriaLimpiada = req.body.categoria.trim();
+
+  if (!categoriasPermitidas.includes(categoriaLimpiada)) {
       return res.status(400).json({ error: 'Categoría no válida' });
   }
+
+  req.body.categoria = categoriaLimpiada;
 
   const { file } = req; // Archivo subido
   const { nombre, categoria, marca, disponibilidad, descripcion, caracteristicas } = req.body;
 
   const precio = parseFloat(req.body.precio);
   const stock = parseInt(req.body.stock) || 0;
-    
+
   // Validación adicional
   if (isNaN(precio)) {
-      return res.status(400).json({ error: 'El precio debe ser un número válido' });
+    return res.status(400).json({ error: 'El precio debe ser un número válido' });
   }
-  
+
   if (isNaN(stock) || stock < 0) {
-      return res.status(400).json({ error: 'El stock debe ser un número mayor o igual a cero' });
+    return res.status(400).json({ error: 'El stock debe ser un número mayor o igual a cero' });
   }
 
   const productoData = {
-      nombre: req.body.nombre,
-      categoria: req.body.categoria,
-      marca: req.body.marca || null,
-      precio: precio,
-      stock: stock,
-      disponibilidad: req.body.disponibilidad,
-      descripcion: req.body.descripcion || null,
-      caracteristicas: req.body.caracteristicas || null,
-      imagen: req.file ? req.file.filename : 'default.jpg'
+    nombre: req.body.nombre,
+    categoria: req.body.categoria,
+    marca: req.body.marca || null,
+    precio: precio,
+    stock: stock,
+    disponibilidad: req.body.disponibilidad,
+    descripcion: req.body.descripcion || null,
+    caracteristicas: req.body.caracteristicas || null,
+    imagen: req.file ? req.file.filename : 'default.jpg'
   };
 
   // Validación de campos requeridos
@@ -162,7 +297,7 @@ router.post('/productos', verifyToken, isAdmin, upload.single('imagen'), (req, r
       console.error('Error en la consulta SQL:', error);
       return res.status(500).json({ error: 'Error en la base de datos' });
     }
-    res.json({ 
+    res.json({
       id: resultados.insertId,
       nombre,
       categoria,
@@ -183,15 +318,18 @@ router.put('/productos/:id', verifyToken, isAdmin, upload.single('imagen'), (req
 
   const categoriasPermitidas = [
     'bicicletas',
-    'ropa_deportiva',
-    'equipamiento',
-    'suplementos',
-    'accesorios'
+    'accesorios',
+    'repuestos',
+    'ropa'
   ];
 
-  if (!categoriasPermitidas.includes(req.body.categoria)) {
+  const categoriaLimpiada = req.body.categoria.trim();
+
+  if (!categoriasPermitidas.includes(categoriaLimpiada)) {
       return res.status(400).json({ error: 'Categoría no válida' });
   }
+
+  req.body.categoria = categoriaLimpiada;
 
   if (req.file) {
     imagen = req.file.filename;
@@ -223,15 +361,14 @@ router.put('/productos/:id', verifyToken, isAdmin, upload.single('imagen'), (req
 // Ruta para obtener productos con filtros
 router.get('/productos', (req, res) => {
   const categoriasValidas = [
-      'bicicletas',
-      'ropa_deportiva',
-      'equipamiento',
-      'suplementos',
-      'accesorios'
+    'bicicletas',
+    'accesorios',
+    'repuestos',
+    'ropa'
   ];
-  
+
   if (req.query.categoria && !categoriasValidas.includes(req.query.categoria)) {
-      return res.status(400).json({ error: 'Categoría no válida' });
+    return res.status(400).json({ error: 'Categoría no válida' });
   }
 
   const { categoria } = req.query;
@@ -329,63 +466,22 @@ router.get('/productos/filtrar', verifyToken, (req, res) => {
 
 // Rutas CRUD
 
-// Obtener todos los registros de una tabla (Solo usuarios autenticados)
-router.get('/:tabla', verifyToken, async (req, res) => {
-  try {
-    const resultados = await obtenerTodos(req.params.tabla);
-    res.send(resultados);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
-// Obtener un registro por ID (Solo usuarios autenticados)
-router.get('/:tabla/:id', verifyToken, async (req, res) => {
-  try {
-    const resultado = await obtenerUno(req.params.tabla, req.params.id);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Crear un nuevo registro (Solo administradores)
-router.post('/:tabla', verifyToken, isAdmin, async (req, res) => {
-  try {
-    const resultado = await crear(req.params.tabla, req.body);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Actualizar un registro por ID (Solo administradores)
-router.put('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
-  try {
-    const resultado = await actualizar(req.params.tabla, req.params.id, req.body);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Eliminar un registro por ID (Solo administradores)
-router.delete('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
-  try {
-    const resultado = await eliminar(req.params.tabla, req.params.id);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// // Crear un nuevo registro (Solo administradores)
+// router.post('/:tabla', verifyToken, isAdmin, async (req, res) => {
+//   try {
+//     const resultado = await crear(req.params.tabla, req.body);
+//     res.send(resultado);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
 
 
 
 
 
-
-// crud.js (modificar/agregar estas rutas)
 
 // Rutas para el carrito
 // Obtener carrito de un usuario
@@ -410,17 +506,18 @@ router.get('/cart/:userId', verifyToken, async (req, res) => {
 router.post('/cart/:userId', verifyToken, async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { producto_nombre, precio, imagen, cantidad } = req.body;
+    const { producto_id, producto_nombre, precio, imagen, cantidad } = req.body; // Añade producto_nombre
 
     const query = `
-      INSERT INTO Carrito (usuario_id, producto_nombre, producto_precio, producto_imagen, cantidad)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO Carrito 
+      (usuario_id, producto_id, producto_nombre, producto_precio, producto_imagen, cantidad)
+      VALUES (?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE cantidad = ?
     `;
 
     conexion.query(
       query,
-      [userId, producto_nombre, precio, imagen, cantidad, cantidad],
+      [userId, producto_id, producto_nombre, precio, imagen, cantidad, cantidad], // Añade producto_nombre
       (error, resultado) => {
         if (error) {
           console.error(error);
@@ -536,6 +633,307 @@ router.get('/productos/validar/:id', (req, res) => {
     }
   );
 });
+
+
+
+
+router.post('/checkout', verifyToken, async (req, res) => {
+  const userId = req.userId;
+  const { direccion, metodo_pago, notas, info_contacto, items, total } = req.body;
+
+  // Validaciones básicas
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ 
+      success: false,
+      error: 'El carrito está vacío',
+      userMessage: 'Tu carrito está vacío. Agrega productos antes de comprar.'
+    });
+  }
+
+  if (!direccion || !metodo_pago) {
+    return res.status(400).json({ 
+      success: false,
+      error: 'Datos incompletos',
+      userMessage: 'Por favor completa todos los campos requeridos.'
+    });
+  }
+
+  try {
+    // Iniciar transacción
+    await conexion.promise().beginTransaction();
+
+    // 1. Verificar stock y preparar datos
+    const productosConStock = [];
+    const productosConStockBajo = [];
+    let totalCalculado = 0;
+
+    for (const item of items) {
+      // Validar item básico
+      if (!item.id || !item.nombre || !item.precio) {
+        await conexion.promise().rollback();
+        return res.status(400).json({ 
+          success: false,
+          error: 'Datos de producto inválidos',
+          userMessage: 'Error en los datos del producto. Por favor recarga la página.'
+        });
+      }
+
+      const [producto] = await conexion.promise().query(
+        'SELECT id, nombre, precio, stock FROM Productos WHERE id = ? FOR UPDATE',
+        [item.id]
+      );
+
+      // Verificar existencia del producto
+      if (!producto || producto.length === 0) {
+        await conexion.promise().rollback();
+        return res.status(404).json({ 
+          success: false,
+          error: `Producto ${item.id} no encontrado`,
+          userMessage: 'Uno de los productos no está disponible. Actualiza tu carrito.'
+        });
+      }
+
+      const productoData = producto[0];
+      const cantidad = parseInt(item.cantidad) || 1;
+
+      // Verificar stock suficiente
+      if (productoData.stock < cantidad) {
+        await conexion.promise().rollback();
+        return res.status(400).json({ 
+          success: false,
+          error: `Stock insuficiente para ${productoData.nombre}`,
+          userMessage: `No hay suficiente stock de ${productoData.nombre}. Disponible: ${productoData.stock} unidades.`,
+          productId: productoData.id,
+          stockDisponible: productoData.stock
+        });
+      }
+
+      // Calcular precio (usar el de la base de datos como fuente de verdad)
+      const precioReal = parseFloat(productoData.precio);
+      totalCalculado += precioReal * cantidad;
+
+      // Verificar si quedará con stock bajo
+      const nuevoStock = productoData.stock - cantidad;
+      if (nuevoStock < 5) {
+        productosConStockBajo.push({
+          id: productoData.id,
+          nombre: productoData.nombre,
+          stock_restante: nuevoStock
+        });
+      }
+
+      productosConStock.push({
+        producto: productoData,
+        cantidad,
+        precio: precioReal
+      });
+    }
+
+    // 2. Crear el pedido
+    const pedidoQuery = `
+      INSERT INTO pedidos 
+      (usuario_id, direccion_envio, metodo_pago, total, notas, info_contacto)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    const [pedidoResult] = await conexion.promise().query(pedidoQuery, [
+      userId,
+      direccion,
+      metodo_pago,
+      totalCalculado,
+      notas || null,
+      info_contacto ? JSON.stringify(info_contacto) : null
+    ]);
+
+    const pedidoId = pedidoResult.insertId;
+
+    // 3. Crear detalles del pedido y actualizar stock
+    for (const item of productosConStock) {
+      // Crear detalle del pedido
+      await conexion.promise().query(
+        `INSERT INTO detalle_pedidos 
+        (pedido_id, producto_id, producto_nombre, cantidad, precio_unitario, subtotal)
+        VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          pedidoId,
+          item.producto.id,
+          item.producto.nombre,
+          item.cantidad,
+          item.precio,
+          item.precio * item.cantidad
+        ]
+      );
+
+      // Disminuir stock
+      await conexion.promise().query(
+        'UPDATE Productos SET stock = stock - ? WHERE id = ?',
+        [item.cantidad, item.producto.id]
+      );
+
+      // Registrar en historial de stock si existe la tabla
+      try {
+        await conexion.promise().query(
+          `INSERT INTO historial_stock 
+          (producto_id, cantidad_anterior, cantidad_nueva, motivo, usuario_id)
+          VALUES (?, ?, ?, ?, ?)`,
+          [
+            item.producto.id,
+            item.producto.stock,
+            item.producto.stock - item.cantidad,
+            'compra',
+            userId
+          ]
+        );
+      } catch (error) {
+        console.warn('No se pudo registrar en historial_stock:', error);
+      }
+    }
+
+    // 4. Crear registro de venta
+    const ventaQuery = `
+      INSERT INTO ventas 
+      (pedido_id, monto_total, impuestos, monto_neto)
+      VALUES (?, ?, ?, ?)
+    `;
+
+    const impuestos = totalCalculado * 0.19;
+    const neto = totalCalculado - impuestos;
+
+    await conexion.promise().query(ventaQuery, [
+      pedidoId,
+      totalCalculado,
+      impuestos,
+      neto
+    ]);
+
+    // 5. Vaciar carrito
+    await conexion.promise().query('DELETE FROM Carrito WHERE usuario_id = ?', [userId]);
+
+    // Confirmar transacción
+    await conexion.promise().commit();
+
+    // Respuesta exitosa
+    const responseData = {
+      success: true,
+      orderId: pedidoId,
+      total: totalCalculado,
+      alertas: productosConStockBajo.length > 0 ? {
+        stock_bajo: productosConStockBajo
+      } : null
+    };
+
+    res.json(responseData);
+
+  } catch (error) {
+    // Revertir transacción en caso de error
+    await conexion.promise().rollback();
+    console.error('Error en checkout:', error);
+    
+    // Determinar tipo de error para mensaje al usuario
+    let userMessage = 'Error al procesar el pedido. Por favor intenta nuevamente.';
+    if (error.code === 'ER_DUP_ENTRY') {
+      userMessage = 'Error de duplicación. Verifica tu pedido.';
+    } else if (error.code === 'ER_LOCK_WAIT_TIMEOUT') {
+      userMessage = 'Tiempo de espera agotado. Por favor intenta nuevamente.';
+    }
+
+    res.status(500).json({ 
+      success: false,
+      error: 'Error en el servidor',
+      userMessage,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+
+
+// === Rutas CRUD genéricas ===
+
+// Definir un array de tablas permitidas para las rutas CRUD genéricas
+const tablasPermitidas = ['Productos', 'Carrito', 'Favoritos', 'pedidos', 'detalle_pedidos', 'ventas'];
+
+
+
+// Obtener todos los registros de una tabla (Solo usuarios autenticados)
+router.get('/:tabla', verifyToken, async (req, res) => {
+  try {
+    const resultados = await obtenerTodos(req.params.tabla);
+    res.send(resultados);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Obtener un registro por ID (Solo usuarios autenticados)
+router.get('/:tabla/:id', verifyToken, async (req, res) => {
+  try {
+    const resultado = await obtenerUno(req.params.tabla, req.params.id);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+// Crear un nuevo registro (Solo administradores)
+router.post('/:tabla', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const resultado = await crear(req.params.tabla, req.body);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+// Actualizar un registro por ID (Solo administradores)
+router.put('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const resultado = await actualizar(req.params.tabla, req.params.id, req.body);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Eliminar un registro por ID (Solo administradores)
+router.delete('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const resultado = await eliminar(req.params.tabla, req.params.id);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+
+
+// Ruta específica para eliminar usuarios con manejo de pedidos asociados
+
+
+
+
+// Obtener productos con stock bajo
+router.get('/productos/stock-bajo', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const [productos] = await conexion.promise().query(
+      `SELECT id, nombre, categoria, stock 
+       FROM Productos 
+       WHERE stock < 5 
+       ORDER BY stock ASC`
+    );
+    res.json(productos);
+  } catch (error) {
+    console.error('Error al obtener productos con stock bajo:', error);
+    res.status(500).json({ error: 'Error al obtener productos con stock bajo' });
+  }
+});
+
+
+
+
 
 
 

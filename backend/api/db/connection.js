@@ -4,9 +4,10 @@ const mysql = require('mysql2');
 const conexion = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'bura12325',
-    database: 'bike_store',
-    port: 3307
+    password: 'root',
+    database: 'bike_storeC',
+      charset: 'utf8mb4'
+    // port: 3307
 });
 
 // Función para la conexión y la reconexión

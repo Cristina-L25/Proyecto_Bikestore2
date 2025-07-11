@@ -7,28 +7,32 @@
  */
 
 import { logout } from './auth.js';
-export function mostrarMensaje(texto, duracion = 2000) {
-  // Eliminar mensaje existente si hay uno
-  const mensajeExistente = document.querySelector(".mensaje-confirmacion");
-  if (mensajeExistente) {
-    mensajeExistente.remove();
-  }
+export function mostrarMensaje(texto, tipo = 'success') {
+  // Eliminar mensajes existentes
+  const mensajesExistentes = document.querySelectorAll(".mensaje-toast");
+  mensajesExistentes.forEach(msg => msg.remove());
 
   // Crear nuevo mensaje
   const mensaje = document.createElement("div");
-  mensaje.className = "mensaje-confirmacion";
+  mensaje.className = `mensaje-toast ${tipo}`;
   mensaje.textContent = texto;
   document.body.appendChild(mensaje);
 
-  // Mostrar con animación y luego ocultar
+  // Mostrar con animación
   setTimeout(() => {
-    mensaje.classList.add("mostrar");
+    mensaje.style.opacity = "1";
+    mensaje.style.transform = "translateY(0)";
+    
+    // Ocultar después de 3 segundos
     setTimeout(() => {
-      mensaje.classList.remove("mostrar");
+      mensaje.style.opacity = "0";
+      mensaje.style.transform = "translateY(-20px)";
+      
+      // Eliminar después de la animación
       setTimeout(() => {
         mensaje.remove();
-      }, 300); // Tiempo para la animación de salida
-    }, duracion);
+      }, 300);
+    }, 3000);
   }, 10);
 }
 
@@ -417,71 +421,58 @@ export function initSlider() {
 
 
 /**
- * Inicializa el carrusel de marcas
+ Inicializa el carrusel de marcas
  */
-export function initBrandsCarousel() {
+ export function initBrandsCarousel() {
   const brandsContainer = document.querySelector('.brands-container');
   const prevBrandButton = document.querySelector('.prev-brand');
   const nextBrandButton = document.querySelector('.next-brand');
-
+  
   if (!brandsContainer) {
     console.warn("No se encontró el contenedor de marcas");
     return;
   }
-
-  const brandWidth = 170; // Ancho de cada elemento marca en píxeles
-  let currentIndex = 0;
-  let brandsInterval;
-
+  
   // Clonar los elementos para el efecto infinito
-  const brands = Array.from(brandsContainer.children);
-  brands.forEach(brand => {
+  const originalBrands = Array.from(brandsContainer.children);
+  
+  // Duplicar las marcas para crear el efecto de carrusel infinito
+  originalBrands.forEach(brand => {
     const clone = brand.cloneNode(true);
     brandsContainer.appendChild(clone);
   });
-
-  // Función para mover el carrusel
-  function moveCarousel() {
-    currentIndex++;
-    if (currentIndex >= brandsContainer.children.length / 2) {
-      currentIndex = 0; // Reiniciar al inicio
-      brandsContainer.scrollTo({ left: 0, behavior: 'smooth' }); // Reiniciar la posición
-    }
-    brandsContainer.scrollBy({
-      left: brandWidth,
-      behavior: 'smooth'
-    });
-  }
-
-  // Iniciar el intervalo para mover el carrusel
-  brandsInterval = setInterval(moveCarousel, 3000); // Cambia cada 3 segundos
-
-  // Configurar navegación anterior
+  
+  // Manejar la navegación con botones
   if (prevBrandButton) {
     prevBrandButton.addEventListener("click", () => {
-      clearInterval(brandsInterval); // Detener el intervalo al hacer clic
-      brandsContainer.scrollBy({
-        left: -brandWidth * 2,
-        behavior: 'smooth'
-      });
-      currentIndex = (currentIndex - 1 + brands.length) % brands.length; // Actualizar índice
-      brandsInterval = setInterval(moveCarousel, 3000); // Reiniciar el intervalo
+      brandsContainer.style.animationPlayState = 'paused';
+      brandsContainer.style.transform = 'translateX(-100px)';
+      setTimeout(() => {
+        brandsContainer.style.transition = 'none';
+        brandsContainer.style.transform = 'translateX(0)';
+        setTimeout(() => {
+          brandsContainer.style.transition = 'transform 0.5s ease';
+          brandsContainer.style.animationPlayState = 'running';
+        }, 50);
+      }, 500);
     });
   }
-
-  // Configurar navegación siguiente
+  
   if (nextBrandButton) {
     nextBrandButton.addEventListener("click", () => {
-      clearInterval(brandsInterval); // Detener el intervalo al hacer clic
-      brandsContainer.scrollBy({
-        left: brandWidth * 2,
-        behavior: 'smooth'
-      });
-      currentIndex = (currentIndex + 1) % brands.length; // Actualizar índice
-      brandsInterval = setInterval(moveCarousel, 3000); // Reiniciar el intervalo
+      brandsContainer.style.animationPlayState = 'paused';
+      brandsContainer.style.transform = 'translateX(100px)';
+      setTimeout(() => {
+        brandsContainer.style.transition = 'none';
+        brandsContainer.style.transform = 'translateX(0)';
+        setTimeout(() => {
+          brandsContainer.style.transition = 'transform 0.5s ease';
+          brandsContainer.style.animationPlayState = 'running';
+        }, 50);
+      }, 500);
     });
   }
-
+  
   console.log("Carrusel de marcas inicializado correctamente");
 }
 

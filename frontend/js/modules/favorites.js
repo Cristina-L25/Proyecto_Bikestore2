@@ -123,13 +123,16 @@ export function cargarFavoritosEnModal() {
   favoritos.forEach((producto, index) => {
     const itemDiv = document.createElement("div");
     itemDiv.className = "cart-item";
-    itemDiv.innerHTML = `
+     itemDiv.innerHTML = `
+      <div class="item-image">
+        <img src="${producto.imagen || 'img/placeholder.jpg'}" alt="${producto.nombre}">
+      </div>
       <div class="item-details">
         <h4>${producto.nombre}</h4>
         <p>${producto.precio}</p>
-        <button class="add-to-cart-btn" data-index="${index}">
-          <i class="fas fa-shopping-cart"></i> Añadir al carrito
-        </button>
+        <button class="release-button" data-id="${producto.id}">
+                                    <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                                </button>
       </div>
       <button class="remove-item" data-index="${index}">×</button>
     `;

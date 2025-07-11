@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finalizar Compra - BikeStore</title>
+ <meta name="description" content="Finaliza tu compra en BikeStore con métodos seguros y envío a todo Colombia.">
+  <title>BikeStore - Finalizar Compra</title>
   <link rel="stylesheet" href="/frontend/static/header_footer.css">
   <link rel="stylesheet" href="/frontend/static/styles.css">
   <link rel="stylesheet" href="/frontend/static/modals.css">
@@ -18,221 +18,396 @@
   <!-- Contenedor para el Header y Nav -->
   <div id="header-container"></div>
 
-  <main class="checkout-container">
-    <h1 class="page-title">Finalizar Compra</h1>
+  <main class="checkout-main-container">
+    <div class="checkout-wrapper">
+      <h1 class="checkout-page-title">Finalizar Compra</h1>
 
-    <div class="checkout-grid">
-      <!-- Sección del formulario de compra -->
-      <section class="checkout-form-section">
-        <form id="checkout-form">
-          <!-- Datos del cliente -->
-          <div class="form-section">
-            <h2>Información de Contacto</h2>
-            <div class="form-group">
-              <label for="nombre">Nombre completo</label>
-              <input type="text" id="nombre" name="nombre" required>
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-              <label for="telefono">Teléfono</label>
-              <input type="tel" id="telefono" name="telefono" required>
-            </div>
-          </div>
+      <div class="checkout-layout-grid">
+<!-- Sección del formulario de compra -->
+<section class="checkout-form-wrapper">
+  <form id="checkout-form">
+    <!-- Datos del cliente -->
+    <div class="checkout-form-section">
+      <h2 class="checkout-section-title">Información de Contacto</h2>
 
-          <!-- Dirección de envío -->
-          <div class="form-section">
-            <h2>Dirección de Envío</h2>
-            <div class="form-group">
-              <label for="direccion">Dirección</label>
-              <input type="text" id="direccion" name="direccion" required>
-            </div>
-            <div class="form-group">
-              <label for="ciudad">Ciudad</label>
-              <input type="text" id="ciudad" name="ciudad" required>
-            </div>
-            <div class="form-group">
-              <label for="departamento">Departamento</label>
-              <select id="departamento" name="departamento" required>
-                <option value="">Selecciona un departamento</option>
-                <option value="Amazonas">Amazonas</option>
-                <option value="Antioquia">Antioquia</option>
-                <option value="Arauca">Arauca</option>
-                <option value="Atlántico">Atlántico</option>
-                <option value="Bogotá">Bogotá D.C.</option>
-                <option value="Bolívar">Bolívar</option>
-                <option value="Boyacá">Boyacá</option>
-                <option value="Caldas">Caldas</option>
-                <option value="Caquetá">Caquetá</option>
-                <option value="Casanare">Casanare</option>
-                <option value="Cauca">Cauca</option>
-                <option value="Cesar">Cesar</option>
-                <option value="Chocó">Chocó</option>
-                <option value="Córdoba">Córdoba</option>
-                <option value="Cundinamarca">Cundinamarca</option>
-                <option value="Guainía">Guainía</option>
-                <option value="Guaviare">Guaviare</option>
-                <option value="Huila">Huila</option>
-                <option value="La Guajira">La Guajira</option>
-                <option value="Magdalena">Magdalena</option>
-                <option value="Meta">Meta</option>
-                <option value="Nariño">Nariño</option>
-                <option value="Norte de Santander">Norte de Santander</option>
-                <option value="Putumayo">Putumayo</option>
-                <option value="Quindío">Quindío</option>
-                <option value="Risaralda">Risaralda</option>
-                <option value="San Andrés">San Andrés y Providencia</option>
-                <option value="Santander">Santander</option>
-                <option value="Sucre">Sucre</option>
-                <option value="Tolima">Tolima</option>
-                <option value="Valle del Cauca">Valle del Cauca</option>
-                <option value="Vaupés">Vaupés</option>
-                <option value="Vichada">Vichada</option>
-              </select>
-            </div>
-          </div>
+      <div class="checkout-form-group">
+        <label for="checkout-nombre" class="checkout-form-label">Nombre completo</label>
+       <input
+  type="text"
+  class="checkout-input"
+  id="checkout-nombre"
+  name="nombre"
+  placeholder="Ej: Juan Pérez"
+  pattern="[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,50}"
+  minlength="3"
+  maxlength="50"
+  title="Solo letras y espacios. Mínimo 3, máximo 50 caracteres"
+  required
+>
 
-          <!-- Método de pago -->
-          <div class="form-section">
-            <h2>Método de Pago</h2>
-            <div class="payment-methods">
-              <div class="payment-option">
-                <input type="radio" id="tarjeta" name="metodo_pago" value="tarjeta" required>
-                <label for="tarjeta">
-                  <i class="fas fa-credit-card"></i>
-                  Tarjeta de Crédito/Débito
-                </label>
-              </div>
+      </div>
 
-              <div class="payment-option">
-                <input type="radio" id="pse" name="metodo_pago" value="pse">
-                <label for="pse">
-                  <i class="fas fa-university"></i>
-                  PSE
-                </label>
-              </div>
+      <div class="checkout-form-group">
+        <label for="checkout-email" class="checkout-form-label">Email</label>
+      <input
+  type="email"
+  class="checkout-input"
+  id="checkout-email"
+  name="email"
+  placeholder="correo@ejemplo.com"
+  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+  minlength="5"
+  maxlength="80"
+  title="Debe ser un correo válido de 5 a 80 caracteres"
+  required
+>
 
-              <div class="payment-option">
-                <input type="radio" id="efectivo" name="metodo_pago" value="efectivo">
-                <label for="efectivo">
-                  <i class="fas fa-money-bill-wave"></i>
-                  Pago Contra-entrega
-                </label>
-              </div>
-            </div>
+      </div>
 
-            <!-- Campos tarjeta de crédito (ocultos inicialmente) -->
-            <div id="tarjeta-fields" class="payment-details" style="display: none;">
-              <div class="form-group">
-                <label for="numero_tarjeta">Número de Tarjeta</label>
-                <input type="text" id="numero_tarjeta" name="numero_tarjeta" placeholder="XXXX XXXX XXXX XXXX">
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="fecha_vencimiento">Vencimiento (MM/AA)</label>
-                  <input type="text" id="fecha_vencimiento" name="fecha_vencimiento" placeholder="MM/AA">
-                </div>
-                <div class="form-group">
-                  <label for="cvv">CVV</label>
-                  <input type="text" id="cvv" name="cvv" placeholder="XXX">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="nombre_tarjeta">Nombre en la tarjeta</label>
-                <input type="text" id="nombre_tarjeta" name="nombre_tarjeta">
-              </div>
-            </div>
+      <div class="checkout-form-group">
+        <label for="checkout-telefono" class="checkout-form-label">Teléfono</label>
+        <input
+          type="tel"
+          class="checkout-input"
+          id="checkout-telefono"
+          name="telefono"
+          placeholder="Ej: 3001234567"
+          pattern="3\d{9}"
+          minlength="10"
+          maxlength="10"
+          inputmode="numeric"
+          title="Debe empezar por 3 y tener 10 dígitos"
+          required
+        >
+      </div>
+    </div>
 
-            <!-- Campos PSE (ocultos inicialmente) -->
-            <div id="pse-fields" class="payment-details" style="display: none;">
-              <div class="form-group">
-                <label for="banco">Banco</label>
-                <select id="banco" name="banco">
-                  <option value="">Seleccione su banco</option>
-                  <option value="bancolombia">Bancolombia</option>
-                  <option value="davivienda">Davivienda</option>
-                  <option value="bbva">BBVA</option>
-                  <option value="popular">Banco Popular</option>
-                  <option value="bogota">Banco de Bogotá</option>
+    <!-- Dirección de envío -->
+    <div class="checkout-form-section">
+      <h2 class="checkout-section-title">Dirección de Envío</h2>
+
+      <div class="checkout-form-group">
+        <label for="checkout-direccion" class="checkout-form-label">Dirección</label>
+        <input
+          type="text"
+          class="checkout-input"
+          id="checkout-direccion"
+          name="direccion"
+          placeholder="Ej: Calle 10 #15-25"
+          minlength="5"
+          maxlength="80"
+          title="Debe tener entre 5 y 80 caracteres"
+          required
+        >
+      </div>
+
+
+              <div class="checkout-form-group">
+                <label for="departamento" class="checkout-form-label">Departamento *</label>
+                <select id="departamento" name="departamento" class="checkout-select" required>
+                  <option value="">Selecciona un departamento primero</option>
+                  <option value="Antioquia">Antioquia</option>
+                  <option value="Atlántico">Atlántico</option>
+                  <option value="Bogota D.C">Bogota D.C</option>
+                  <option value="Bolívar">Bolívar</option>
+                  <option value="Boyacá">Boyacá</option>
+                  <option value="Caldas">Caldas</option>
+                  <option value="Caquetá">Caquetá</option>
+                  <option value="Casanare">Casanare</option>
+                  <option value="Cauca">Cauca</option>
+                  <option value="Cesar">Cesar</option>
+                  <option value="Chocó">Chocó</option>
+                  <option value="Córdoba">Córdoba</option>
+                  <option value="Cundinamarca">Cundinamarca</option>
+                  <option value="Huila">Huila</option>
+                  <option value="La Guajira">La Guajira</option>
+                  <option value="Magdalena">Magdalena</option>
+                  <option value="Meta">Meta</option>
+                  <option value="Nariño">Nariño</option>
+                  <option value="Norte de Santander">Norte de Santander</option>
+                  <option value="Putumayo">Putumayo</option>
+                  <option value="Quindío">Quindío</option>
+                  <option value="Risaralda">Risaralda</option>
+                  <option value="San Andrés">San Andrés</option>
+                  <option value="Santander">Santander</option>
+                  <option value="Sucre">Sucre</option>
+                  <option value="Tolima">Tolima</option>
+                  <option value="Valle del Cauca">Valle del Cauca</option>
+                  <option value="Vaupés">Vaupés</option>
+                  <option value="Vichada">Vichada</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label for="tipo_persona">Tipo de persona</label>
-                <select id="tipo_persona" name="tipo_persona">
-                  <option value="natural">Persona Natural</option>
-                  <option value="juridica">Persona Jurídica</option>
-                </select>
+
+              <div class="checkout-form-row">
+                <div class="checkout-form-group">
+                  <label for="ciudad" class="checkout-form-label">Ciudad *</label>
+                  <select id="ciudad" name="ciudad" class="checkout-select" required>
+                    <option value="">Selecciona una ciudad</option>
+                    <!-- Las ciudades se llenarán dinámicamente con JS -->
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Notas del pedido -->
-          <div class="form-section">
-            <h2>Notas del pedido (opcional)</h2>
-            <div class="form-group">
-              <textarea id="notas" name="notas" rows="3" placeholder="Instrucciones especiales para la entrega, etc."></textarea>
+            <!-- Método de pago -->
+            <div class="checkout-form-section">
+              <h2 class="checkout-section-title">Método de Pago</h2>
+              <div class="checkout-payment-methods">
+                <div class="checkout-payment-option">
+                  <input type="radio" id="tarjeta" name="metodo_pago" value="tarjeta" required>
+                  <label for="tarjeta" class="checkout-payment-label">
+                    <i class="fas fa-credit-card checkout-payment-icon"></i>
+                    <span class="checkout-payment-text">Tarjeta de Crédito/Débito</span>
+                  </label>
+                </div>
+
+                <div class="checkout-payment-option">
+                  <input type="radio" id="pse" name="metodo_pago" value="pse">
+                  <label for="pse" class="checkout-payment-label">
+                    <i class="fas fa-university checkout-payment-icon"></i>
+                    <span class="checkout-payment-text">PSE</span>
+                  </label>
+                </div>
+
+                <div class="checkout-payment-option">
+                  <input type="radio" id="efectivo-fields" name="metodo_pago" value="efectivo">
+                  <label for="efectivo-fields" class="checkout-payment-label">
+                    <i class="fas fa-money-bill-wave checkout-payment-icon"></i>
+                    <span class="checkout-payment-text">Pago Contra-entrega</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Campos tarjeta de crédito (ocultos inicialmente) -->
+<!-- Campos tarjeta de crédito (ocultos inicialmente) -->
+<div id="tarjeta-fields" class="checkout-payment-details" style="display: none;">
+  <div class="checkout-form-group">
+    <label for="numero_tarjeta" class="checkout-form-label">Número de Tarjeta</label>
+    <input
+      type="text"
+      class="checkout-input"
+      id="numero_tarjeta"
+      name="numero_tarjeta"
+      placeholder="XXXX XXXX XXXX XXXX"
+      inputmode="numeric"
+      maxlength="19"
+      pattern="(?:\d{4} ?){4}"
+      title="Ingresa 16 dígitos separados opcionalmente por espacios"
+      required
+    >
+  </div>
+
+  <div class="checkout-form-row">
+    <div class="checkout-form-group">
+      <label for="fecha_vencimiento" class="checkout-form-label">Vencimiento (MM/AA)</label>
+  <input
+  type="text"
+  class="checkout-input"
+  id="fecha_vencimiento"
+  name="fecha_vencimiento"
+  placeholder="MM/AA"
+  pattern="(0[1-9]|1[0-2])\/\d{2}"
+  maxlength="5"
+  inputmode="numeric"
+  title="Formato válido: MM/AA (ej. 09/25)"
+  required
+>
+    </div>
+    <div class="checkout-form-group">
+      <label for="cvv" class="checkout-form-label">CVV</label>
+      <input
+        type="text"
+        class="checkout-input"
+        id="cvv"
+        name="cvv"
+        placeholder="XXX"
+        pattern="\d{3}"
+        maxlength="3"
+        title="Debe ser un número de 3 dígitos"
+        required
+      >
+    </div>
+  </div>
+
+  <div class="checkout-form-group">
+    <label for="nombre_tarjeta" class="checkout-form-label">Nombre en la tarjeta</label>
+    <input
+      type="text"
+      class="checkout-input"
+      id="nombre_tarjeta"
+      name="nombre_tarjeta"
+      placeholder="Ej: Juan Pérez"
+      pattern="[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,50}"
+      title="Solo letras y espacios (mínimo 3 caracteres)"
+      required
+    >
+  </div>
+</div>
+
+<!-- Campos PSE (ocultos inicialmente) -->
+<div id="pse-fields" class="checkout-payment-details" style="display: none;">
+
+  <!-- Selector de opción: Banco o Billetera -->
+  <div class="checkout-form-group">
+    <label for="pse-opcion" class="checkout-form-label">¿Cómo deseas pagar?</label>
+    <select id="pse-opcion" class="checkout-select">
+      <option value="">Selecciona una opción</option>
+      <option value="banco">Banco</option>
+      <option value="billetera">Billetera digital</option>
+    </select>
+  </div>
+
+<!-- Subpanel: Banco -->
+<div id="pse-banco" style="display: none;">
+  <div class="checkout-form-group">
+    <label for="banco" class="checkout-form-label">Banco</label>
+    <select id="banco" name="banco" class="checkout-select" required>
+      <option value="">Seleccione su banco</option>
+      <option value="bancolombia">Bancolombia</option>
+      <option value="davivienda">Davivienda</option>
+      <option value="bbva">BBVA</option>
+      <option value="bogota">Banco de Bogotá</option>
+    </select>
+  </div>
+
+  <div class="checkout-form-group">
+    <label for="tipo_persona" class="checkout-form-label">Tipo de persona</label>
+    <select id="tipo_persona" name="tipo_persona" class="checkout-select" required>
+      <option value="">Selecciona una opción</option>
+      <option value="natural">Persona Natural</option>
+      <option value="juridica">Persona Jurídica</option>
+    </select>
+  </div>
+
+  <div class="checkout-form-group">
+    <label for="documento" class="checkout-form-label">Número de documento</label>
+    <input
+      type="text"
+      id="documento"
+      name="documento"
+      class="checkout-input"
+      placeholder="Ej: 1234567890"
+      pattern="\d{6,10}"
+      maxlength="10"
+      minlength="6"
+      inputmode="numeric"
+      title="Debe ingresar entre 6 y 12 dígitos numéricos"
+      required
+    >
+  </div>
+
+  <div class="checkout-form-group">
+    <label for="nombre_titular" class="checkout-form-label">Nombre del titular de la cuenta</label>
+    <input
+      type="text"
+      id="nombre_titular"
+      name="nombre_titular"
+      class="checkout-input"
+      placeholder="Ej: Juan Pérez"
+      pattern="[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,50}"
+      title="Solo letras, mínimo 3 caracteres"
+      required
+    >
+  </div>
+</div>
+
+
+  <!-- Subpanel: Billetera Digital -->
+<div id="pse-billetera" style="display: none;">
+  <div class="checkout-form-group">
+    <label for="billetera" class="checkout-form-label">Billetera Digital</label>
+    <select id="billetera" name="billetera" class="checkout-select" required>
+      <option value="">Selecciona una billetera</option>
+      <option value="nequi">Nequi</option>
+      <option value="daviplata">Daviplata</option>
+    </select>
+  </div>
+
+  <div class="checkout-form-group">
+    <label for="numero_billetera" class="checkout-form-label">Número de celular</label>
+<input
+  type="tel"
+  id="numero_billetera"
+  name="numero_billetera"
+  class="checkout-input"
+  placeholder="Ej: 3001234567"
+  pattern="3\d{9}"
+  maxlength="10"
+  minlength="10"
+  inputmode="numeric"
+  title="Debe ingresar un número de 10 dígitos que comience por 3"
+  required
+>
+  </div>
+</div>
+</div>
+
+            <!-- Notas del pedido -->
+            <div class="checkout-form-section">
+              <h2 class="checkout-section-title">Notas del pedido (opcional)</h2>
+              <div class="checkout-form-group">
+                <textarea id="notas" name="notas" rows="3" class="checkout-textarea"
+                  placeholder="Instrucciones especiales para la entrega, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="checkout-form-actions">
+              <button type="submit" class="checkout-btn-primary">Completar Pedido</button>
+              <a href="productos.html" class="checkout-btn-secondary">Seguir Comprando</a>
+            </div>
+          </form>
+        </section>
+
+        <!-- Resumen del pedido -->
+        <section class="checkout-order-summary">
+          <h2 class="checkout-summary-title">Resumen del Pedido</h2>
+          <div class="checkout-order-items" id="order-items">
+            <!-- Aquí se insertarán los productos dinámicamente -->
+          </div>
+          <div class="checkout-order-totals">
+            <div class="checkout-subtotal-row">
+              <span>Subtotal</span>
+              <span id="subtotal">COP $0</span>
+            </div>
+            <div class="checkout-shipping-row">
+              <span>Envío</span>
+              <span id="shipping">COP $12,000</span>
+            </div>
+            <div class="checkout-tax-row">
+              <span>IVA (19%)</span>
+              <span id="tax">COP $0</span>
+            </div>
+            <div class="checkout-discount-row" id="discount-container" style="display: none;">
+              <span>Descuento</span>
+              <span id="discount">-COP $0</span>
+            </div>
+            <div class="checkout-total-row">
+              <span>Total</span>
+              <span id="total">COP $12,000</span>
             </div>
           </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn-complete-order">Completar Pedido</button>
-            <a href="productos.html" class="btn-continue-shopping">Seguir Comprando</a>
-          </div>
-        </form>
-      </section>
-
-      <!-- Resumen del pedido -->
-      <section class="order-summary-section">
-        <h2>Resumen del Pedido</h2>
-        <div id="order-items">
-          <!-- Aquí se insertarán los productos dinámicamente -->
-        </div>
-        <div class="order-totals">
-          <div class="subtotal-row">
-            <span>Subtotal</span>
-            <span id="subtotal">COP $0</span>
-          </div>
-          <div class="shipping-row">
-            <span>Envío</span>
-            <span id="shipping">COP $12,000</span>
-          </div>
-          <div class="tax-row">
-            <span>IVA (19%)</span>
-            <span id="tax">COP $0</span>
-          </div>
-          <div class="discount-row" id="discount-container" style="display: none;">
-            <span>Descuento</span>
-            <span id="discount">-COP $0</span>
-          </div>
-          <div class="total-row">
-            <span>Total</span>
-            <span id="total">COP $12,000</span>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   </main>
 
   <!-- Modal de confirmación -->
-  <div id="confirmation-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="confirmation-icon">
+  <div id="confirmation-modal" class="checkout-modal">
+    <div class="checkout-modal-content">
+      <span class="checkout-modal-close">&times;</span>
+      <div class="checkout-confirmation-icon">
         <i class="fas fa-check-circle"></i>
       </div>
       <h2>¡Pedido Confirmado!</h2>
-      <p>Tu pedido #<span id="order-number"></span> ha sido recibido.</p>
-      <p>Te hemos enviado un correo con los detalles de tu compra.</p>
-      <div class="confirmation-details">
+      <p>Tu pedido #<span id="order-number"></span> ha sido Enviado.</p>
+      <div class="checkout-confirmation-details">
         <p><strong>Método de pago:</strong> <span id="payment-method"></span></p>
         <p><strong>Dirección de envío:</strong> <span id="shipping-address"></span></p>
         <p><strong>Total:</strong> <span id="confirmation-total"></span></p>
       </div>
-      <div class="confirmation-actions">
-        <a href="index.html" class="btn-primary">Volver a la tienda</a>
-        <a href="mi-cuenta.html" class="btn-secondary">Ver mis pedidos</a>
+      <div class="checkout-confirmation-actions">
+        <a href="index.html" class="checkout-btn-primary">Volver a la tienda</a>
+        <a href="mi-cuenta.html" class="checkout-btn-secondary">Ver mis pedidos</a>
       </div>
     </div>
   </div>

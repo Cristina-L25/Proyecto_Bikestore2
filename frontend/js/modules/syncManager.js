@@ -95,12 +95,19 @@ export async function actualizarCarritoEnBD(item, accion) {
 
     if (accion === 'agregar' || accion === 'actualizar') {
       method = accion === 'agregar' ? 'POST' : 'PUT';
+      
+      // Ensure precio is a string before attempting to use replace
+      const precioFormatted = typeof item.precio === 'string' 
+        ? item.precio.replace(/[^\d]/g, "") 
+        : String(item.precio);
+        
       await apiRequest(endpoint, {
         method,
         body: JSON.stringify({
+          producto_id: item.id,
           producto_nombre: item.nombre,
-          precio: item.precio.replace(/[^\d]/g, ""),
-          imagen: item.imagen,
+          precio: precioFormatted,
+          imagen: item.imagen || '',
           cantidad: item.cantidad || 1
         })
       });
@@ -132,12 +139,17 @@ export async function actualizarFavoritoEnBD(item, accion) {
     let method = 'POST';
 
     if (accion === 'agregar') {
+      // Ensure precio is a string before attempting to use replace
+      const precioFormatted = typeof item.precio === 'string' 
+        ? item.precio.replace(/[^\d]/g, "") 
+        : String(item.precio);
+        
       await apiRequest(endpoint, {
         method,
         body: JSON.stringify({
           producto_nombre: item.nombre,
-          precio: item.precio.replace(/[^\d]/g, ""),
-          imagen: item.imagen
+          precio: precioFormatted,
+          imagen: item.imagen || ''
         })
       });
     } else if (accion === 'eliminar') {

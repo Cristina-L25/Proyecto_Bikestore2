@@ -1,11 +1,13 @@
-import { attachLoginListener, attachRegistroListener, attachLogoutListener } from './modules/auth.js';
+import { attachLoginListener, attachRegistroListener, attachLogoutListener, attachForgotPasswordListener, checkForResetTokenInURL   } from './modules/auth.js';
 import { initCarrito, actualizarContadorCarrito } from './modules/cart.js';
 import { activarBotonesFavoritos } from './modules/favorites.js';
 import { loadHeaderFooter, initSlider, initBrandsCarousel, setupModals, mostrarMensaje, setupSessionModal } from './modules/ui.js';
 import { filtrarProductos } from './modules/filters.js';
 import { updateUIBasedOnAuth } from './modules/ui.js';
+import { initSearch } from './modules/search.js';
 
 document.addEventListener("DOMContentLoaded", function () {
+   attachForgotPasswordListener();
   window.addEventListener('scroll', function() {
     const header = document.querySelector('header');
     const navMenu = document.querySelector('.nav-menu');
@@ -21,10 +23,15 @@ document.addEventListener("DOMContentLoaded", function () {
       navMenu.classList.remove('scrolled');
     }
   });
+  
   // Primero cargar header y footer
   loadHeaderFooter()
     .then(() => {
       console.log("Header y footer cargados");
+      
+      // Inicializar búsqueda después de cargar el header
+      initSearch();
+      
       // Luego cargar los modales
       const modalsContainer = document.getElementById('modals-container');
       if (!modalsContainer) {
@@ -37,14 +44,12 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.text();
         });
     })
-
     .then(html => {
       document.getElementById('modals-container').innerHTML = html;
       console.log("Modales cargados");
 
-      // Añadir esta línea
-      setupSessionModal(); // <-- Configurar modal de sesión
-
+      // Configurar modal de sesión
+      setupSessionModal();
       setupModals();
       attachLoginListener();
       attachRegistroListener();
@@ -53,6 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
       activarBotonesFavoritos();
       updateUIBasedOnAuth();
       attachLogoutListener();
+      
+      // Inicializar el listener de recuperación de contraseña DESPUÉS de cargar los modales
+      attachForgotPasswordListener();
+      
+      // Verificar token de recuperación al cargar la página
+      checkForResetTokenInURL();
     })
     .catch(error => {
       console.error("Error de inicialización:", error);

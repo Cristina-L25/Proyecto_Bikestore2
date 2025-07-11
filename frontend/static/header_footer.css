@@ -1,5 +1,6 @@
+/* ========== HEADER ========== */
 header {
-  height: 130px;
+  height: 120px; /* Altura fija más consistente */
   position: fixed;
   top: 0;
   left: 0;
@@ -9,27 +10,73 @@ header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   z-index: 1001;
-  padding: 10px 20px;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 header.scrolled {
-  height: 100px;
-  padding: 5px 20px;
-  background: linear-gradient(to right, #5b3478, #8832c4);
+  height: 80px; /* Reducir más para una transición más notable */
+  padding: 10px 20px;
+  background: linear-gradient(to right, #5b3478, #9932d4);
 }
 
-
 header.scrolled .logo {
-  width: 90px;      /* Reduce el tamaño del logo */
+  width: 70px;
   transition: width 0.3s ease, font-size 0.3s ease;
 }
 
+/* ========== NAVBAR ========== */
+.nav-menu {
+  position: fixed;
+  top: 120px; /* Debe coincidir EXACTAMENTE con la altura del header */
+  left: 0;
+  width: 100%;
+  background-color: #f8f8f8;
+  padding: 2px 0;
+  border-bottom: 1px solid #eee;
+  z-index: 1000;
+  transition: top 0.3s ease, padding 0.3s ease; /* Transición suave */
+}
 
+.nav-menu.scrolled {
+  top: 80px; /* Debe coincidir EXACTAMENTE con header.scrolled height */
+  padding: 2px 0;
+}
 
-/* Estilo general para los iconos */
+.nav-menu ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu li a {
+  color: #333;
+  text-decoration: none;
+  padding: 8px 15px;
+  transition: color 0.3s;
+  display: block;
+}
+
+.nav-menu li a:hover {
+  color: #832ec9;
+}
+
+/* ========== LOGO ========== */
+.logo {
+  width: 110px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #333;
+  margin-left: 20px;
+  transition: all 0.3s ease;
+}
+
+/* ========== ICONOS ========== */
 .icon {
   position: relative;
   cursor: pointer;
@@ -39,114 +86,102 @@ header.scrolled .logo {
 }
 
 .icon i {
-  font-size: 28px;
-  /* Iconos más grandes */
+  font-size: 24px;
   color: white;
-  /* Color base para que contraste con el fondo morado */
   transition: color 0.3s ease;
 }
 
-/* Efecto hover */
 .icon:hover {
   background: rgba(255, 255, 255, 0.062);
-  /* Un ligero fondo blanco con transparencia */
   transform: scale(1.1);
-  /* Un pequeño zoom al pasar el mouse */
 }
 
-/* Estilo específico para el carrito */
 .cart-icon i {
   color: #ffffff;
-  /* Dorado para resaltar */
 }
 
 .cart-icon:hover i {
   color: rgb(222, 90, 255);
-  /* Naranja dorado */
 }
 
-/* Estilo específico para el login */
 #loginIcon i {
   color: #ffffff;
-  /* Celeste */
 }
 
 #loginIcon:hover i {
   color: rgb(222, 90, 255);
-  /* Azul más vibrante */
 }
 
-/* Estilo específico para favoritos */
 #favoritesIcon i {
   color: #ffffff;
-  /* Rosa */
 }
 
 #favoritesIcon:hover i {
-  color: #e74c3c; /* Fucsia oscuro */
+  color: #e74c3c;
 }
 
-/* Estilo para la burbuja de notificación */
-/* .badge {
-    background: #ff8800;
-    color: white;
-    font-size: 12px;
-    border-radius: 50%;
-    padding: 5px 8px;
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-weight: bold;
-  } */
-  
-  .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #e74c3c;
-    color: white;
-    font-size: 12px;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-
-
-
-
-
-.logo {
-  width: 120px;
-  font-weight: bold;
-  font-size: 24px;
-  color: #333;
-  margin-left: 20px;
-}
-
-.search-bar {
-  flex-grow: 1;
-  max-width: 600px;
-  position: relative;
-  margin: 0 20px;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  outline: none;
-}
-
-.search-bar:before {
-  content: "🔍";
+.badge {
   position: absolute;
-  right: 15px;
-  top: 10px;
+  top: -5px;
+  right: -5px;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== BUSCADOR ========== */
+.search-container {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+.search-box {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  background-color: rgb(255, 255, 255);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  outline: none;
+  justify-content: center;
+}
+
+.search-box:focus {
+  background: white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.search-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding-top: 5px;
+}
+
+.search-button:hover {
+  transform: translateY(-50%) scale(1.1);
 }
 
 .icon1 {
@@ -154,65 +189,47 @@ header.scrolled .logo {
   gap: 15px;
 }
 
-/* .icon {
-      font-size: 20px;
-      color: #ffffff;
-      cursor: pointer;
-      position: relative;
-      display: flex;
-      gap: 15px;
-  } */
-
-
-
-/* Menú de navegación */
-.nav-menu {
-  position: fixed;
-  top: 130px;
-  /* Comienza justo debajo del header */
-  left: 0;
-  width: 100%;
-  background-color: #f8f8f8;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-  z-index: 1000;
-  /* Menor que el header pero aún alto */
+/* ========== PANEL DE SESIÓN ========== */
+#sessionPanel {
+  display: none;
+  align-items: center;
+  gap: 15px;
 }
 
-
-.nav-menu.scrolled {
-  top: 100px;  /* Se ajusta a la nueva altura del header */
-  padding: 5px 0;
-  /* background: linear-gradient(to right, #f8f8f8, #8832c4); */
-}
-
-.nav-menu ul {
+#sessionPanel .session-icons {
   display: flex;
-  justify-content: center;
-  list-style: none;
-  gap: 30px;
+  align-items: center;
+  gap: 15px;
 }
 
-.nav-menu li a {
-  color: #333;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 5px 10px;
-  transition: color 0.3s;
+#sessionPanel .icon {
+  position: relative;
+  cursor: pointer;
 }
 
-.nav-menu li a:hover {
-  color: #3498db;
+#sessionPanel .badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
 }
 
-
-
-/* Footer */
+/* ========== FOOTER ========== */
 footer {
   background-color: #222;
   color: #fff;
   padding: 40px 20px;
   margin-top: 20px;
+}
+
+.footer-links img {
+  width: 120px;
+  font-size: 24px;
+  margin-left: 20px;
 }
 
 .footer-content {
@@ -279,34 +296,79 @@ footer {
   border-top: 1px solid #444;
 }
 
-
-
-
-#sessionPanel {
-  display: none;
-  /* Oculto por defecto */
-  align-items: center;
-  gap: 15px;
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  header {
+    height: 100px;
+    padding: 10px 15px;
+  }
+  
+  header.scrolled {
+    height: 70px;
+    padding: 8px 15px;
+  }
+  
+  .nav-menu {
+    top: 100px;
+    padding: 10px 0;
+  }
+  
+  .nav-menu.scrolled {
+    top: 70px;
+    padding: 8px 0;
+  }
+  
+  .nav-menu ul {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .nav-menu li a {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  
+  .logo {
+    width: 80px;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+  
+  .search-container {
+    max-width: 200px;
+  }
+  
+  .icon i {
+    font-size: 20px;
+  }
+  
+  .icon1 {
+    gap: 10px;
+  }
 }
 
-#sessionPanel .session-icons {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-#sessionPanel .icon {
-  position: relative;
-  cursor: pointer;
-}
-
-#sessionPanel .badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.7rem;
+@media (max-width: 480px) {
+  header {
+    height: 80px;
+    padding: 8px 10px;
+  }
+  
+  header.scrolled {
+    height: 60px;
+    padding: 5px 10px;
+  }
+  
+  .nav-menu {
+    top: 80px;
+    padding: 8px 0;
+  }
+  
+  .nav-menu.scrolled {
+    top: 60px;
+    padding: 6px 0;
+  }
+  
+  .search-container {
+    display: none; /* Ocultar buscador en móviles muy pequeños */
+  }
 }

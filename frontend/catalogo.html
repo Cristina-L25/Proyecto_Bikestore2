@@ -1,145 +1,141 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Catálogo - Bike Store</title>
-    <link rel="stylesheet" href="/frontend/static/header_footer.css" />
-    <link rel="stylesheet" href="/frontend/static/catalogo.css" />
-    <link rel="stylesheet" href="/frontend/static/modals.css" />
-    <!-- Font Awesome para íconos -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <img alt="logo" src="/frontend/img/bike_logo.svg" />
-  </head>
 
-  <body>
-    <!-- Contenedor para el Header y Nav -->
-    <div id="header-container"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo - Bike Store</title>
+  <link rel="stylesheet" href="/frontend/static/header_footer.css" />
+  <link rel="stylesheet" href="/frontend/static/catalogo.css" />
+  <link rel="stylesheet" href="/frontend/static/modals.css" />
+  <!-- Font Awesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <img alt="logo" src="/frontend/img/bike_logo.svg" />
+</head>
 
-    
-    <!-- Contenido Principal -->
-    <div class="container">
-      <div class="main-content">
-        <!-- Filtros -->
-        <aside class="filters">
-          <h2>FILTROS</h2>
-<!-- Botón para limpiar filtros -->
-<button id="clear-filters">Limpiar Filtros</button>
+<body>
+  <!-- Contenedor para el Header y Nav -->
+  <div id="header-container"></div>
 
-          <div class="filter-group">
-            <h3>Categorías</h3>
-            <ul class="filter-options">
-              <li>
-                <label> <input type="checkbox" /> Bicicletas </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Ropa Deportiva </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Equipamiento </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Suplementos </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Accesorios </label>
-              </li>
-            </ul>
+
+  <!-- Contenido Principal -->
+  <div class="container">
+    <div class="main-content">
+      <!-- Filtros -->
+      <aside class="filters">
+        <h2>FILTROS</h2>
+        <!-- Botón para limpiar filtros -->
+        <button id="clear-filters">Limpiar Filtros</button>
+
+        <div class="filter-group">
+          <h3>Categorías</h3>
+          <ul class="filter-options" id="filter-categorias">
+            <li>
+              <label> <input type="checkbox" value="bicicletas" />Bicicletas</label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="accesorios" /> Accesorios </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="repuestos" /> Repuestos y componentes </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="ropa" /> Ropa de ciclismo </label>
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <h3>Precio</h3>
+          <ul class="filter-options" id="filter-precios">
+            <li>
+              <label> <input type="checkbox" value="0 - 100000" /> $0 - $100.000 </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="100000 - 300000" /> $100.000 - $300.000 </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="300000 - 1000000" /> $300.000 - $1.000.000 </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="1000000+" /> +$1.000.000 </label>
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <h3>Marca</h3>
+          <ul class="filter-options" id="filter-marcas">
+            <li>
+              <label> <input type="checkbox" value="KSW Bikes" /> KSW Bikes </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="TYESO" /> TYESO </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="Specialized" /> Specialized </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="Giant" /> Giant </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="Cannondale" /> Cannondale </label>
+            </li>
+            <li>
+              <label> <input type="checkbox" value="Garmin" /> Garmin </label>
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-group">
+          <h3></h3>
+          <!-- botón para filtrar los productos -->
+          <button id="filtrar-prod">Aplicar filtros</button>
+
+
+      </aside>
+
+      <!-- Productos -->
+      <section class="products-section">
+        <div class="products-header">
+          <h1>CATÁLOGO DE PRODUCTOS</h1>
+
+
+
+
+        </div>
+        <div class="sort-options">
+        </div>
+
+        <div class="products-grid" id="productos-container">
+          <!-- Los productos se renderizarán via ui.js -->
+        </div>
+
+
+
+        <!-- Paginación -->
+        <div class="pagination">
+          <div class="pagination-item active">1</div>
+          <div class="pagination-item">2</div>
+          <div class="pagination-item">3</div>
+          <div class="pagination-item">4</div>
+          <div class="pagination-item">
+            <i class="fas fa-chevron-right"></i>
           </div>
-
-          <div class="filter-group">
-            <h3>Precio</h3>
-            <ul class="filter-options">
-              <li>
-                <label> <input type="checkbox" /> $0 - $50 </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> $50 - $100 </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> $100 - $200 </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> $200+ </label>
-              </li>
-            </ul>
-          </div>
-
-          <div class="filter-group">
-            <h3>Marca</h3>
-            <ul class="filter-options">
-              <li>
-                <label> <input type="checkbox" /> KSW Bikes </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> TYESO </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Specialized </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Giant </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Cannondale </label>
-              </li>
-              <li>
-                <label> <input type="checkbox" /> Garmin </label>
-              </li>
-            </ul>
-          </div>
-
- 
-
-          <div class="filter-group">
-            <!-- botón para filtrar los productos -->
-                <button id="filtrar-prod">Aplicar filtros</button>
-
-
-        </aside>
-     
-        <!-- Productos -->
-        <section class="products-section">
-          <div class="products-header">
-            <h1>CATÁLOGO DE PRODUCTOS</h1>
-
-           
-
-            
-          </div>
-          <div class="sort-options">
-            </div>
-      <div class="productos-container">
-       <div class="products-grid">
-    <!-- Aquí se insertarán los productos dinámicamente -->
-       </div>
-      </div>
-          
-
-          <!-- Paginación -->
-          <div class="pagination">
-            <div class="pagination-item active">1</div>
-            <div class="pagination-item">2</div>
-            <div class="pagination-item">3</div>
-            <div class="pagination-item">4</div>
-            <div class="pagination-item">
-              <i class="fas fa-chevron-right"></i>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
+  </div>
 
-<!--  -->
+  <!--  -->
 
-    <!-- Contenedor para el Footer -->
-    <div id="footer-container"></div>
+  <!-- Contenedor para el Footer -->
+  <div id="footer-container"></div>
 
-    <div id="modals-container"></div>
-  </body>
-  <script src="/frontend/js/modules/catalogo.js"></script>
-  <script type="module" src="/frontend/js/main.js"></script>
+  <div id="modals-container"></div>
+</body>
+<script type="module" src="/frontend/js/modules/catalogo.js"></script>
+<script type="module" src="/frontend/js/main.js"></script>
+
 </html>

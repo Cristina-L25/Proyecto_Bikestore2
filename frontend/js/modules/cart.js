@@ -5,10 +5,18 @@ import { actualizarCarritoEnBD } from './syncManager.js';
 
 
 
+// Límites configurables
+const MAX_PRODUCTOS_EN_CARRITO = 15; // Límite de productos diferentes
+const MAX_CANTIDAD_POR_PRODUCTO = 10; // Límite de unidades por producto
+
+
+
+
 export function initCarrito() {
   document.querySelectorAll('.add-to-cart, .release-button').forEach(button => {
-    button.addEventListener('click', () => {
-      const productCard = button.closest('.product-card, .release-card');
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const productCard = this.closest('.product-card, .release-card');
       
       // Obtener datos incluyendo el ID
       const productId = button.getAttribute('data-id'); // 🆕 Nueva línea
@@ -39,65 +47,60 @@ export function actualizarContadorCarrito() {
 
 // Función para agregar productos al carrito
 export function agregarAlCarrito(producto) {
-  // Obtener el carrito actual
+  // Verificar si el producto tiene ID válido
   if (!producto.id) {
-    mostrarMensaje('Error: Producto no válido', 3000);
+    mostrarMensaje('Error: Producto no válido', 'error');
     throw new Error('El producto no tiene un ID válido');
   }
-  
+
   let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
   
-  // Asegurarnos de que el producto tenga un ID
-  if (!producto.id) {
-    console.error('Advertencia: Producto sin ID detectado', producto);
-    // Si no hay ID, podemos intentar generar uno temporal o rechazar la adición
-    // En un escenario real, todos los productos deberían tener ID desde la base de datos
+  // Verificar límite de productos diferentes
+  if (carrito.length >= MAX_PRODUCTOS_EN_CARRITO && 
+      !carrito.some(item => item.id === producto.id)) {
+    mostrarMensaje(`Límite alcanzado: Máximo ${MAX_PRODUCTOS_EN_CARRITO} productos diferentes en el carrito`, 'error');
+    return carrito;
   }
-  
-  // Verificar si el producto ya está en el carrito
-  const productoExistente = carrito.findIndex(item => item.nombre === producto.nombre);
-  
-  if (productoExistente !== -1) {
-    // Si el producto ya existe, incrementamos la cantidad
-    carrito[productoExistente].cantidad = (carrito[productoExistente].cantidad || 1) + 1;
-    
-    // Asegurarnos de que tenga ID (por si se agregó antes sin ID)
-    if (producto.id && !carrito[productoExistente].id) {
-      carrito[productoExistente].id = producto.id;
+
+  // Buscar producto existente
+  const productoExistenteIndex = carrito.findIndex(item => item.id === producto.id);
+
+  if (productoExistenteIndex !== -1) {
+    // Verificar límite de cantidad por producto
+    if (carrito[productoExistenteIndex].cantidad >= MAX_CANTIDAD_POR_PRODUCTO) {
+      mostrarMensaje(
+        `Límite alcanzado: Máximo ${MAX_CANTIDAD_POR_PRODUCTO} unidades por producto`,
+        'error'
+      );
+      return carrito;
     }
+    
+    // Incrementar cantidad si no supera el límite
+    carrito[productoExistenteIndex].cantidad += 1;
+    mostrarMensaje(
+      `${producto.nombre} - Cantidad: ${carrito[productoExistenteIndex].cantidad}`,
+      'success'
+    );
   } else {
-    // Si es un producto nuevo, lo agregamos al carrito con cantidad 1
-    carrito.push({
-      id: producto.id, // Asegurarnos de incluir el ID
-      nombre: producto.nombre,
-      precio: producto.precio,
-      imagen: producto.imagen,
-      cantidad: 1
-    });
+    // Agregar nuevo producto
+    carrito.push({ ...producto, cantidad: 1 });
+    mostrarMensaje(`${producto.nombre} agregado al carrito`, 'success');
   }
-  
-  // Guardar el carrito actualizado
+
   localStorage.setItem('carrito', JSON.stringify(carrito));
-  
-  // Actualizar el contador del carrito en la UI
   actualizarContadorCarrito();
   
-  // Sincronizar con la base de datos si hay un usuario logueado
+  // Sincronizar con BD si hay usuario logueado
   const token = localStorage.getItem('token');
   if (token) {
     try {
-      // Decodificar el token para obtener el ID del usuario
       const payload = JSON.parse(atob(token.split('.')[1]));
-      const userId = payload.id;
-      
-      // Actualizar en la base de datos
-      actualizarCarritoEnBD({
-        id: producto.id, // Incluir ID aquí también
-        nombre: producto.nombre,
-        precio: producto.precio,
-        imagen: producto.imagen,
-        cantidad: 1
-      }, 'agregar');
+      actualizarCarritoEnBD(
+        productoExistenteIndex !== -1 
+          ? carrito[productoExistenteIndex] 
+          : { ...producto, cantidad: 1 },
+        productoExistenteIndex !== -1 ? 'actualizar' : 'agregar'
+      );
     } catch (error) {
       console.error('Error al sincronizar con BD:', error);
     }
@@ -105,6 +108,8 @@ export function agregarAlCarrito(producto) {
   
   return carrito;
 }
+
+
 
 export function actualizarCarritoModal() {
   const cartItemsContainer = document.getElementById("cart-items");
@@ -131,6 +136,9 @@ export function actualizarCarritoModal() {
     itemDiv.className = "cart-item";
 
     itemDiv.innerHTML = `
+      <div class="item-image">
+        <img src="${producto.imagen || 'img/placeholder.jpg'}" alt="${producto.nombre}">
+      </div>
       <div class="item-details">
         <h4>${producto.nombre}</h4>
         <p>${producto.precio || 'Precio no disponible'}</p>
@@ -176,15 +184,33 @@ export function actualizarCarritoModal() {
 
 export function incrementarCantidad(index) {
   let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  if (carrito[index]) {
-    carrito[index].cantidad = (carrito[index].cantidad || 1) + 1;
+  
+  if (!carrito[index]) return;
 
-    // Intentar actualizar en BD
-    actualizarCarritoEnBD(carrito[index], 'actualizar');
+  // Verificar límite antes de incrementar
+  if (carrito[index].cantidad >= MAX_CANTIDAD_POR_PRODUCTO) {
+    mostrarMensaje(
+      `Límite alcanzado: Máximo ${MAX_CANTIDAD_POR_PRODUCTO} unidades por producto`,
+      'error'
+    );
+    return;
   }
+
+  carrito[index].cantidad += 1;
   localStorage.setItem("carrito", JSON.stringify(carrito));
+
+  // Actualizar UI
   actualizarCarritoModal();
   actualizarContadorCarrito();
+  
+  // Mostrar feedback al usuario
+  mostrarMensaje(
+    `${carrito[index].nombre} - Cantidad: ${carrito[index].cantidad}`,
+    'info'
+  );
+
+  // Sincronizar con BD
+  actualizarCarritoEnBD(carrito[index], 'actualizar');
 }
 
 export function decrementarCantidad(index) {
@@ -223,3 +249,6 @@ export function eliminarDelCarrito(index) {
   // Intentar actualizar en base de datos si hay sesión activa
   actualizarCarritoEnBD(itemEliminado, 'eliminar');
 }
+
+
+

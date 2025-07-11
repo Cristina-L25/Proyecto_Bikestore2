@@ -1,113 +1,264 @@
 <!-- modals.html -->
 
 <!-- Modal de Login (contenido tomado de login.html) -->
-<div class="login-modal" id="loginModal" role="dialog" aria-modal="true" tabindex="-1">
-    <div class="login-content">
-      <span class="close-button" tabindex="0">&times;</span>
-      
-      <!-- Sign In Form -->
-      <div class="login-container" id="signIn">
-        <h1 class="form-title">Acceder</h1>
-        <form id="loginForm">
-          <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" name="email" id="signInEmail" placeholder="Email" required>
-            <label for="signInEmail">Email</label>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" name="password" id="signInPassword" placeholder="Password" required>
-            <label for="signInPassword">Contraseña</label>
-          </div>
-          <p class="recover">
-            <a href="#">Recuperar Contraseña</a>
-          </p>
-          <input type="submit" class="btn" value="Ingresar" name="signIn">
-        </form>
-        <p class="or">----------o----------</p>
-        <div class="icons">
-          <i class="fab fa-google"></i>
-          <i class="fab fa-facebook"></i>
+<div
+  class="login-modal"
+  id="loginModal"
+  role="dialog"
+  aria-modal="true"
+  tabindex="-1"
+>
+  <div class="login-content">
+    <span class="close-button" tabindex="0">&times;</span>
+
+    <!-- Sign In Form -->
+    <div class="login-container" id="signIn">
+      <h1 class="form-title">Acceder</h1>
+      <form id="loginForm" novalidate autocomplete="off">
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            name="email"
+            id="signInEmail"
+            placeholder="Email"
+            required
+          />
+          <label for="signInEmail">Email</label>
         </div>
-        <div class="links">
-          <p>¿No tienes una cuenta todavía?</p>
-          <button id="signUpButton">Registrarse</button>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            name="password"
+            id="signInPassword"
+            placeholder="Password"
+            required
+            autocomplete="new-password"
+          />
+          <label for="signInPassword">Contraseña</label>
         </div>
-      </div>
-  
-      <!-- Sign Up Form -->
-      <div class="login-container" id="signup" style="display:none;">
-        <h1 class="form-title">Registro</h1>
-        <form id="registerForm">
-          <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" name="fName" id="nombre" placeholder="First Name" required>
-            <label>Nombre</label>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-phone"></i>
-            <input type="tel" name="phone" id="telefono" placeholder="Teléfono" required>
-            <label>Teléfono</label>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" name="email" id="email" placeholder="Email" required>
-            <label>Email</label>
-          </div>
-          <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" name="password" id="contraseña" placeholder="Password" required>
-            <label>Contraseña</label>
-          </div>
-          <div class="input-group">
-            <i class="fa-solid fa-house"></i>
-            <input type="text" name="direccion" id="direccion" placeholder="Direccion" required>
-            <label>Direccion</label>
-          </div>
-          <input type="submit" class="btn" value="Registrarse" name="signUp">
-        </form>
-        <p class="or">----------o----------</p>
-        <div class="icons">
-          <i class="fab fa-google"></i>
-          <i class="fab fa-facebook"></i>
-        </div>
-        <div class="links">
-          <p>¿Ya tienes una cuenta?</p>
-          <button id="signInButton">Acceder</button>
-        </div>
+        <!-- En modals.html, modifica esta parte -->
+<p class="recover">
+  <a href="#" id="forgotPasswordLink">Recuperar Contraseña</a>
+</p>
+        <input type="submit" class="btn" value="Ingresar" name="signIn" />
+      </form>
+      <!-- <p class="or">----------o----------</p>
+      <div class="icons">
+        <i class="fab fa-google"></i>
+        <i class="fab fa-facebook"></i>
+      </div> -->
+      <div class="links">
+        <p>¿No tienes una cuenta todavía?</p>
+        <button id="signUpButton">Registrarse</button>
       </div>
     </div>
-  </div>
-  
-  <!-- Modal Carrito -->
-  <div id="cart-modal">
-    <button class="close-btn">×</button>
-    <h2>Tu Carrito</h2>
-    <div id="cart-items">
-      <!-- Aquí se inyectarán los productos del carrito -->
+
+    <!-- Sign Up Form -->
+    <div class="login-container" id="signup" style="display: none">
+      <h1 class="form-title">Registro</h1>
+      <form id="registerForm" novalidate autocomplete="off">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            name="fName"
+            id="nombre"
+            placeholder="First Name"
+            required
+          />
+          <label>Nombre</label>
+        </div>
+        <div
+          class="input-group"
+          style="display: flex; align-items: center; position: relative"
+        >
+          <i
+            class="fas fa-phone"
+            style="
+              position: absolute;
+              left: 2px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: #000000;
+            "
+          ></i>
+          <div style="display: flex; gap: 8px; width: 100%; padding-left: 30px">
+            <select id="codigoPais" name="codigoPais" style="flex: 1">
+              <option value="+57">COL +57</option>
+              <option value="+1">USA +1</option>
+              <option value="+34">ESP +34</option>
+              <option value="+49">GER +49</option>
+              <option value="+52">MEX +52</option>
+            </select>
+            <input
+              type="tel"
+              name="phone"
+              id="telefono"
+              placeholder="Número sin prefijo"
+              required
+              style="flex: 2"
+            />
+          </div>
+          <label
+            for="telefono"
+            class="telefono-paceholder"
+            id="telefono-paceholder"
+            >telefono</label
+          >
+        </div>
+
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            required
+          />
+          <label>Email</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            name="password"
+            id="contraseña"
+            placeholder="Password"
+            required
+          />
+          <label>Contraseña</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            name="confirmarContraseña"
+            id="confirmarContraseña"
+            placeholder="Confirmar Contraseña"
+            required
+            autocomplete="new-password"
+          />
+          <label>Confirmar Contraseña</label>
+        </div>
+        <div class="input-group">
+          <i class="fa-solid fa-house"></i>
+          <input
+            type="text"
+            name="direccion"
+            id="direccion"
+            placeholder="Direccion"
+            required
+          />
+          <label>Direccion</label>
+        </div>
+        <input type="submit" class="btn" value="Registrarse" name="signUp" />
+      </form>
+      <!-- <p class="or">----------o----------</p>
+      <div class="icons">
+        <i class="fab fa-google"></i>
+        <i class="fab fa-facebook"></i>
+      </div> -->
+      <div class="links">
+        <p>¿Ya tienes una cuenta?</p>
+        <button id="signInButton">Acceder</button>
+      </div>
     </div>
-    <div id="cart-total"></div>
-    <button id="clear-cart">Vaciar Carrito</button>
   </div>
-  
-  <!-- Modal de Favoritos -->
-  <div id="favorites-modal">
-    <button class="close-btn">×</button>
-    <h2>Mis Favoritos</h2>
-    <div id="favorites-items">
-      <!-- Aquí se inyectarán los productos favoritos -->
-    </div>
-    <button id="clear-favorites">Vaciar Favoritos</button>
+</div>
+
+<!-- Modal Carrito -->
+<div id="cart-modal">
+  <button class="close-btn">×</button>
+  <h2>Tu Carrito</h2>
+  <div id="cart-items">
+    <!-- Aquí se inyectarán los productos del carrito -->
   </div>
-  
+  <div id="cart-total"></div>
+  <button id="clear-cart">Vaciar Carrito</button>
+</div>
+
+<!-- Modal de Favoritos -->
+<div id="favorites-modal">
+  <button class="close-btn">×</button>
+  <h2>Mis Favoritos</h2>
+  <div id="favorites-items">
+    <!-- Aquí se inyectarán los productos favoritos -->
+  </div>
+  <button id="clear-favorites">Vaciar Favoritos</button>
+</div>
+
+<div id="session-modal">
+  <div class="modal-content">
+    <!-- Capa adicional para detectar clics externos -->
+    <span class="close-button" id="closeSessionModal">&times;</span>
+    <h2>Sesión activa</h2>
+    <p>Bienvenido, usuario</p>
+    <button id="logoutButton">Cerrar sesión</button>
+  </div>
+</div>
 
 
 
-  <div id="session-modal">
-    <div class="modal-content"> <!-- Capa adicional para detectar clics externos -->
-      <span class="close-button" id="closeSessionModal">&times;</span>
-      <h2>Sesión activa</h2>
-      <p>Bienvenido, usuario</p>
-      <button id="logoutButton">Cerrar sesión</button>
-    </div>
+
+
+
+
+<!-- Añade esto al final de modals.html -->
+<div id="forgotPasswordModal" class="login-modal">
+  <div class="login-content">
+    <span class="close-button" tabindex="0">&times;</span>
+    <h1 class="form-title">Recuperar Contraseña</h1>
+    <form id="forgotPasswordForm">
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input
+          type="email"
+          name="email"
+          id="forgotPasswordEmail"
+          placeholder="Email"
+          required
+        />
+        <label for="forgotPasswordEmail">Email</label>
+      </div>
+      <input type="submit" class="btn" value="Enviar Enlace" />
+    </form>
+    <div id="forgotPasswordMessage" style="margin-top: 15px;"></div>
   </div>
+</div>
+
+<div id="resetPasswordModal" class="login-modal">
+  <div class="login-content">
+    <span class="close-button" tabindex="0">&times;</span>
+    <h1 class="form-title">Restablecer Contraseña</h1>
+    <form id="resetPasswordForm">
+      <input type="hidden" id="resetToken">
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input
+          type="password"
+          name="newPassword"
+          id="newPassword"
+          placeholder="Nueva Contraseña"
+          required
+        />
+        <label for="newPassword">Nueva Contraseña</label>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input
+          type="password"
+          name="confirmNewPassword"
+          id="confirmNewPassword"
+          placeholder="Confirmar Nueva Contraseña"
+          required
+        />
+        <label for="confirmNewPassword">Confirmar Nueva Contraseña</label>
+      </div>
+      <input type="submit" class="btn" value="Restablecer Contraseña" />
+    </form>
+    <div id="resetPasswordMessage" style="margin-top: 15px;"></div>
+  </div>
+</div>

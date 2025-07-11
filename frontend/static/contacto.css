@@ -1,0 +1,299 @@
+/* =============================
+   Estilos para la página de contacto de Bike Store
+============================= */
+
+/* ========== Variables ========== */
+:root {
+    --primary-color: #6d438f;
+    --secondary-color: #9932d4;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --overlay-color: rgba(0, 0, 0, 0.4);
+    --success-color: #4CAF50;
+    --error-color: #f44336;
+    --white: #ffffff;
+}
+
+/* ========== Reset básico ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ========== Body ========== */
+body {
+    padding-top: 170px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========== Página de contacto ========== */
+.contact-page {
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+    position: relative;
+    width: 100%;
+    padding: 20px;
+}
+
+/* ========== Contenedor principal ========== */
+.contact-container {
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========== Información de contacto ========== */
+.contact-info,
+.contact-info-modal {
+    color: var(--white);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 40%;
+}
+
+.contact-info-modal {
+    background-color: var(--secondary-color);
+}
+
+.contact-info h2,
+.contact-info-modal h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.contact-info h2::after,
+.contact-info-modal h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 50px;
+    height: 4px;
+    background-color: var(--white);
+    border-radius: 2px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.info-item i {
+    font-size: 22px;
+    margin-right: 15px;
+}
+
+.info-item p {
+    font-size: 14px;
+}
+
+/* ========== Redes sociales ========== */
+.social-links {
+    margin-top: 30px;
+}
+
+.social-links a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    line-height: 36px;
+    border-radius: 50%;
+    margin-right: 10px;
+    color: var(--white);
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: var(--white);
+    color: var(--primary-color);
+}
+
+/* ========== Imagen en contacto ========== */
+.contact-info img.contact-image {
+    width: 90%;
+    max-width: 250px;
+    border-radius: 10px;
+    margin: 40px auto 15px;
+    display: block;
+    object-fit: contain;
+    max-height: 150px;
+}
+
+
+/*  Formulario */
+.contact-form {
+    padding: 40px;
+    width: 60%;
+}
+
+.contact-form h2 {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.contact-form h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 50px;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(109, 67, 143, 0.2);
+    outline: none;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.error {
+    color: var(--error-color);
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+/* ========== Botón de enviar ========== */
+.submit-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensaje de éxito  */
+
+.success-message {
+    display: none;
+    position: fixed;
+    top: 150px; /* Ajustado para que aparezca debajo del header */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--success-color);
+    color: var(--white);
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1010; /* Mayor que el z-index del header */
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    min-width: 300px;
+    max-width: 80%;
+}
+
+/* ========== Animaciones ========== */
+@keyframes slideIn {
+    from {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========== Responsivo ========== */
+@media screen and (max-width: 768px) {
+    .contact-container {
+        flex-direction: column;
+    }
+    .contact-info,
+    .contact-info-modal,
+    .contact-form {
+        width: 100%;
+    }
+    .contact-info,
+    .contact-info-modal {
+        padding: 30px;
+    }
+    .success-message {
+        min-width: 90%;
+    }
+}

@@ -1,245 +1,435 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panel de Administración - Bike Store</title>
-    <!-- Fuentes e iconos externos -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Enlace a hoja de estilos local -->
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <!-- Contenedor principal del panel de administración -->
-    <div class="admin-container">
-      <!-- Barra lateral de navegación -->
-      <aside class="sidebar">
-        <div class="logo">
-          <h1>Bike <span>Store</span></h1>
-        </div>
-        <nav class="menu">
-          <!-- Botones de navegación con iconos -->
-          <button class="menu-btn active" data-section="usuarios">
-            <i class="fas fa-users"></i> Usuarios
-          </button>          
-          <button class="menu-btn" data-section="productos">
-            <i class="fas fa-bicycle"></i> Productos
-          </button>
-          <!-- Después de los botones de navegación, dentro de <nav class="menu"> -->
-<div class="menu-footer">
-  <button id="btn-cerrar-sesion" class="btn-cerrar-sesion">
-    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-  </button>
-</div>
-        </nav>
-      </aside>
 
-      <!-- Área principal de contenido -->
-      <main class="content">
-        <!-- Sección de Clientes -->
-        <section id="usuarios" class="section active">
-          <header>
-            <h2>Gestión de Usuarios</h2>
-            <button id="btn-nuevo-usuario" class="btn-nuevo">
-              <i class="fas fa-user-plus"></i> Nuevo Usuario
-            </button>
-          </header>
-        
-          <div class="table-container">
-            <table id="usuarios-table">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - Bike Store</title>
+  <!-- Fuentes e iconos externos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <!-- Enlace a hoja de estilos local -->
+  <link rel="stylesheet" href="styles.css" />
+
+
+
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- jsPDF-AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+  <!-- Contenedor principal del panel de administración -->
+  <div class="admin-container">
+    <!-- Barra lateral de navegación -->
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>Bike <span>Store</span></h1>
+      </div>
+      <nav class="menu">
+        <!-- Botones de navegación con iconos -->
+        <button class="menu-btn active" data-section="usuarios">
+          <i class="fas fa-users"></i> Usuarios
+        </button>
+        <button class="menu-btn" data-section="productos">
+          <i class="fas fa-bicycle"></i> Productos
+        </button>
+        <button class="menu-btn" data-section="ventas-section">
+          <i class="fas fa-chart-line"></i> Ventas y Productos
+        </button>
+        <div class="menu-footer">
+          <button id="btn-cerrar-sesion" class="btn-cerrar-sesion">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Área principal de contenido -->
+    <main class="content">
+      <!-- Sección de Usuarios -->
+      <section id="usuarios" class="section active">
+        <header>
+          <h2>Gestión de Usuarios</h2>
+          <button id="btn-nuevo-usuario" class="btn-nuevo">
+            <i class="fas fa-user-plus"></i> Nuevo Usuario
+          </button>
+        </header>
+        <div class="table-container">
+          <table id="usuarios-table">
+            <thead>
+              <tr>
+                <th>Nombre Completo</th>
+                <th>Correo Electrónico</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usuarios-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Sección de Productos -->
+      <section id="productos" class="section">
+        <header>
+          <h2>Catálogo de Productos</h2>
+          <button id="btn-nuevo-producto" class="btn-nuevo">
+            <i class="fas fa-plus"></i> Nuevo Producto
+          </button>
+        </header>
+        <div class="productos-categorias">
+          <div class="categoria bicicletas">
+            <h3>Bicicletas</h3>
+            <div id="productos-bicicletas" class="lista-productos"></div>
+          </div>
+          <div class="categoria accesorios">
+            <h3>Accesorios</h3>
+            <div id="productos-accesorios" class="lista-productos"></div>
+          </div>
+          <div class="categoria repuestos">
+            <h3>Repuestos y Componentes</h3>
+            <div id="productos-repuestos" class="lista-productos"></div>
+          </div>
+          <div class="categoria ropa">
+            <h3>Ropa de Ciclismo</h3>
+           <div id="productos-ropa" class="lista-productos"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de Ventas y Productos -->
+      <section id="ventas-section" class="section">
+        <div class="section-header">
+          <h2>Ventas y Productos</h2>
+        </div>
+        <div class="ventas-tabs">
+          <button class="ventas-tab active" data-tab="historial-ventas">
+            <i class="fas fa-receipt"></i> Historial de Ventas
+          </button>
+          <button class="ventas-tab" data-tab="productos-vendidos">
+            <i class="fas fa-trophy"></i> Productos Más Vendidos
+          </button>
+
+        </div>
+
+        <!-- Contenido de Historial de Ventas -->
+        <div id="historial-ventas" class="ventas-content active">
+
+          <!-- 1) Logo oculto para jsPDF -->
+          <img id="logo-report" src="/logoBikeGrande.png" alt="Logo tienda" style="display: none;" />
+
+          <!-- 2) Canvas oculto para la gráfica -->
+          <canvas id="chart-ventas" width="400" height="200" style="display: none;"></canvas>
+
+          <div class="filtro-container">
+            <h3>Filtrar por fechas</h3>
+            <div class="filtro-fechas">
+              <div class="campo-fecha">
+                <label for="fecha-inicio">Desde:</label>
+                <input type="date" id="fecha-inicio" name="fecha-inicio">
+              </div>
+              <div class="campo-fecha">
+                <label for="fecha-fin">Hasta:</label>
+                <input type="date" id="fecha-fin" name="fecha-fin">
+              </div>
+              <button id="btn-filtrar-ventas" class="btn">
+                <i class="fas fa-filter"></i> Filtrar
+              </button>
+              <!-- <button id="btn-emitir-reporte" class="btn">
+                <i class="fas fa-print"></i> Emitir Reporte
+              </button> -->
+              <button id="btn-descargar-reporte" class="btn">
+                <i class="fas fa-download"></i> Descargar Reporte
+              </button>
+              <button id="btn-descargar-pdf" class="btn">
+                <i class="fas fa-file-pdf"></i> Descargar Reporte de Ventas
+              </button>
+
+            </div>
+          </div>
+
+          <div class="resumen-ventas">
+            <div class="resumen-item">
+              <div class="resumen-icono">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <div class="resumen-datos">
+                <span class="resumen-valor" id="total-ventas">0</span>
+                <span class="resumen-etiqueta">Ventas Totales</span>
+              </div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-icono">
+                <i class="fas fa-money-bill-wave"></i>
+              </div>
+              <div class="resumen-datos">
+                <span class="resumen-valor" id="total-ingresos">$0</span>
+                <span class="resumen-etiqueta">Ingresos</span>
+              </div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-icono">
+                <i class="fas fa-box"></i>
+              </div>
+              <div class="resumen-datos">
+                <span class="resumen-valor" id="total-productos">0</span>
+                <span class="resumen-etiqueta">Productos Vendidos</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabla-container">
+            <table class="tabla-datos">
               <thead>
                 <tr>
-                  <th>Nombre Completo</th>
-                  <th>Correo Electrónico</th>
-                  <th>Teléfono</th>
-                  <th>Dirección</th>
-                  <th>Acciones</th>
+                  <th>ID Venta</th>
+                  <th>Fecha</th>
+                  <th>Nombre del cliente</th>
+                  <th>Dirección de Envío</th>
+                  <th>Productos</th>
+                  <th>Total</th>
+                  <!-- <th>Acciones</th> -->
                 </tr>
               </thead>
-              <tbody id="usuarios-tbody"></tbody>
+              <tbody id="ventas-tbody"></tbody>
             </table>
           </div>
-        </section>
-        
-        
 
-        <!-- Sección de Productos -->
-       <!-- Sección de Productos -->
-<section id="productos" class="section">
-  <header>
-    <h2>Catálogo de Productos</h2>
-    <button id="btn-nuevo-producto" class="btn-nuevo">
-      <i class="fas fa-plus"></i> Nuevo Producto
-    </button>
-  </header>
 
-  <div class="productos-categorias">
-    <!-- Categoría: Bicicletas -->
-    <!-- Categoría: Bicicletas -->
-<div class="categoria bicicletas">
-  <h3>Bicicletas</h3>
-  <div id="productos-bicicletas" class="lista-productos">
-    <!-- Vacío -->
-  </div>
-</div>
+          <!-- Logo oculto para jsPDF -->
+          <img id="logo-report" src="/bike cri.png" style="display:none;" />
 
-<!-- Categoría: Ropa Deportiva -->
-<div class="categoria ropa_deportiva">
-  <h3>Ropa Deportiva</h3>
-  <div id="productos-ropa_deportiva" class="lista-productos">
-    <!-- Vacío -->
-  </div>
-</div>
+          <!-- Canvas para la gráfica -->
+          <canvas id="chart-ventas" width="400" height="200" style="display:none;"></canvas>
 
-<!-- Categoría: Equipamiento -->
-<div class="categoria equipamiento">
-  <h3>Equipamiento</h3>
-  <div id="productos-equipamiento" class="lista-productos">
-    <!-- Vacío -->
-  </div>
-</div>
 
-<!-- Categoría: Suplementos -->
-<div class="categoria suplementos">
-  <h3>Suplementos</h3>
-  <div id="productos-suplementos" class="lista-productos">
-    <!-- Vacío -->
-  </div>
-</div>
 
-<!-- Categoría: Accesorios -->
-<div class="categoria accesorios">
-  <h3>Accesorios</h3>
-  <div id="productos-accesorios" class="lista-productos">
-    <!-- Vacío -->
-  </div>
-</div>
+          <!-- Contenedor oculto para el reporte -->
+          <div id="reporte-container" style="display:none;">
+            <header class="report-header">
+              <h1>Ventas por cliente</h1>
+              <p>Fecha y hora de emisión: <span id="reporte-fecha"></span></p>
+              <p>Usuario emisor: <span id="reporte-usuario"></span></p>
+            </header>
 
-  </div>
-</section>
+            <table id="reporte-tabla">
+              <thead>
+                <tr>
+                  <th>Fecha de venta</th>
+                  <th>ID Venta</th>
+                  <th>Cliente</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Aquí volcarás las filas -->
+              </tbody>
+            </table>
 
-      </main>
-    </div>
-
-    <!-- Modal para formulario de cliente -->
-    <div id="modal-cliente" class="modal">
-      <div class="modal-contenido">
-        <span class="cerrar-modal">&times;</span>
-        <h2 id="titulo-modal-cliente">Registrar Nuevo Cliente</h2>
-        <form id="formulario-cliente">
-          <input type="hidden" id="cliente-id" />
-          <div class="form-grupo">
-            <label for="cliente-nombre">Nombre Completo</label>
-            <input type="text" id="cliente-nombre" required />
+            <footer class="report-footer">
+              <p class="page-number"></p>
+            </footer>
           </div>
-          <div class="form-grupo">
-            <label for="cliente-correo">Correo Electrónico</label>
-            <input type="email" id="cliente-correo" required />
-          </div>
-          <div class="form-grupo">
-            <label for="cliente-telefono">Teléfono</label>
-            <input type="tel" id="cliente-telefono" required />
-          </div>
-          <div class="form-grupo">
-            <label for="cliente-direccion">Dirección</label>
-            <textarea id="cliente-direccion" required></textarea>
-          </div>
-          <!-- Dentro del formulario de cliente -->
-<input type="hidden" id="cliente-contraseña" value="Temporal123" />
-          <div class="form-acciones">
-            <button type="submit" class="btn-guardar">Guardar</button>
-            <button type="button" class="btn-cancelar" id="cancelar-cliente">Cancelar</button>
-          </div>
-        </form>
-      </div>
-    </div>
 
-    <!-- Modal para detalles de producto -->
-    <div id="modal-detalle-producto" class="modal">
-      <div class="modal-contenido">
-        <span class="cerrar-modal">&times;</span>
-        <div id="detalle-producto-contenido">
-          <!-- Contenido dinámico del producto -->
+
         </div>
-      </div>
-    </div>
 
-    <!-- Modal para formulario de producto -->
-    <div id="modal-producto" class="modal">
-      <div class="modal-contenido">
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Contenido de Productos Más Vendidos -->
+        <div id="productos-vendidos" class="ventas-content">
+         <!-- En la sección de Productos Más Vendidos -->
+<div class="filtro-container">
+    <h3>Filtrar por fechas</h3>
+    <div class="filtro-fechas">
+        <div class="campo-fecha">
+            <label for="fecha-inicio-productos">Desde:</label>
+            <input type="date" id="fecha-inicio-productos" name="fecha-inicio-productos">
+        </div>
+        <div class="campo-fecha">
+            <label for="fecha-fin-productos">Hasta:</label>
+            <input type="date" id="fecha-fin-productos" name="fecha-fin-productos">
+        </div>
+        <button id="btn-filtrar-productos" class="btn">
+            <i class="fas fa-filter"></i> Filtrar
+        </button>
+        <!-- Después del botón de Filtrar -->
+<button id="btn-descargar-productos" class="btn">
+  <i class="fas fa-download"></i> Descargar Reporte
+</button>
+<button id="btn-descargar-productos-pdf" class="btn">
+  <i class="fas fa-file-pdf"></i> Descargar Reporte de Venta
+</button>
+
+    </div>
+    <!-- <h3>O filtrar por periodo:</h3>
+    <div class="filtro-periodo">
+        <select id="periodo-vendidos">
+            <option value="mes">Último mes</option>
+            <option value="trimestre">Último trimestre</option>
+            <option value="semestre">Último semestre</option>
+            <option value="anio">Último año</option>
+        </select>
+    </div> -->
+</div>
+<div class="productos-top-categorias"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modales -->
+  <!-- Modal para Usuarios -->
+  <div id="modal-usuario" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal">&times;</span>
+      <h2 id="titulo-modal-usuario">Registrar Nuevo Usuario</h2>
+      <form id="formulario-usuario">
+        <input type="hidden" id="usuario-id" />
+        <div class="form-grupo">
+          <label for="usuario-nombre">Nombre Completo</label>
+          <input type="text" id="usuario-nombre" required />
+        </div>
+        <div class="form-grupo">
+          <label for="usuario-correo">Correo Electrónico</label>
+          <input type="email" id="usuario-correo" required />
+        </div>
+        <div class="form-grupo">
+          <label for="usuario-telefono">Teléfono</label>
+          <input type="tel" id="usuario-telefono" required />
+        </div>
+        <div class="form-grupo">
+          <label for="usuario-direccion">Dirección</label>
+          <textarea id="usuario-direccion" required></textarea>
+        </div>
+        <div class="form-acciones">
+          <button type="submit" class="btn-guardar">Guardar</button>
+          <button type="button" class="btn-cancelar" id="cancelar-usuario">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para Productos -->
+  <div id="modal-producto" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal">&times;</span>
+      <h2 id="titulo-modal-producto">Registrar Nuevo Producto</h2>
+      <form id="formulario-producto" enctype="multipart/form-data">
+        <input type="hidden" id="producto-id" />
+        <div class="form-grupo">
+          <label for="producto-nombre">Nombre</label>
+          <input type="text" id="producto-nombre" name="nombre" required>
+        </div>
+        <div class="form-grupo">
+          <label for="producto-categoria">Categoría</label>
+          <select id="producto-categoria" name="categoria" required>
+            <option value="bicicletas">Bicicletas</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="repuestos">Repuestos y Componentes</option>
+            <option value="ropa">Ropa de Ciclismo</option>
+          </select>
+        </div>
+        <div class="form-grupo">
+          <label for="producto-marca">Marca</label>
+          <input type="text" id="producto-marca" name="marca" required>
+        </div>
+        <div class="form-grupo">
+          <label for="producto-precio">Precio (COP)</label>
+          <input type="number" id="producto-precio" name="precio" required>
+        </div>
+        <!-- Mantenemos el mismo campo de stock pero con un atributo data-max -->
+<div class="form-grupo">
+  <label for="producto-stock">Stock</label>
+  <input 
+    type="number" 
+    id="producto-stock" 
+    name="stock" 
+    min="0" 
+    data-max="100" 
+    Valor máximo por defecto
+    value="0" 
+    required
+  >
+  <small id="stock-message">Máximo permitido: 100 unidades</small>
+</div>
+        <div class="form-grupo">
+          <label for="producto-disponibilidad">Disponibilidad</label>
+          <select id="producto-disponibilidad" name="disponibilidad" required>
+            <option value="disponible">Disponible</option>
+            <option value="agotado">Agotado</option>
+            <option value="proxima-llegada">Próxima Llegada</option>
+          </select>
+        </div>
+
+
+
+
+        <div class="form-grupo">
+    <input type="hidden" id="imagen-actual" name="imagenActual" value="">
+    
+    <div id="imagen-preview">
+      <!-- Aquí se mostrará la imagen actual al editar -->
+    </div>
+    
+    <label for="producto-imagen">Imagen del producto:</label>
+    <input type="file" id="producto-imagen" name="imagen" accept="image/*">
+    <small>Dejar en blanco para mantener la imagen actual</small>
+  </div>
+
+
+
+        <div class="form-grupo">
+          <label for="producto-descripcion">Descripción</label>
+          <textarea id="producto-descripcion" name="descripcion" required></textarea>
+        </div>
+        <div class="form-grupo">
+          <label for="producto-caracteristicas">Características Técnicas</label>
+          <textarea id="producto-caracteristicas" name="caracteristicas"></textarea>
+        </div>
+        <div class="form-acciones">
+          <button type="submit" class="btn-guardar">Guardar</button>
+          <button type="button" class="btn-cancelar" id="cancelar-producto">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para detalles de venta -->
+  <div id="modal-detalle-venta" class="modal">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h3>Detalle de Venta</h3>
         <span class="cerrar-modal">&times;</span>
-        <h2 id="titulo-modal-producto">Registrar Nuevo Producto</h2>
-        <form id="formulario-producto" enctype="multipart/form-data">
-          <input type="hidden" id="producto-id" />
-          <div class="form-grupo">
-            <label for="producto-nombre">Nombre</label>
-            <input type="text" id="producto-nombre" name="nombre" required>
-          </div>
-          <div class="form-grupo">
-            <label for="producto-categoria">Categoría</label>
-            <select id="producto-categoria" name="categoria" required>
-              <option value="bicicletas">Bicicletas</option>
-              <option value="ropa_deportiva">Ropa Deportiva</option> 
-              <option value="equipamiento">Equipamiento</option>
-              <option value="suplementos">Suplementos</option>
-              <option value="accesorios">Accesorios</option>
-          </select>  
-          </div>
-          <div class="form-grupo">
-            <label for="producto-marca">Marca</label>
-            <input type="text" id="producto-marca" name="marca" required>
-          </div>
-          <div class="form-grupo">
-            <label for="producto-precio">Precio (COP)</label>
-            <input type="number" id="producto-precio" name="precio" required>
-          </div>
-          <div class="form-grupo">
-            <label for="producto-stock">Stock</label>
-            <input type="number" id="producto-stock" name="stock" min="0" value="0" required>
-          </div>
-          <div class="form-grupo">
-            <label for="producto-disponibilidad">Disponibilidad</label>
-            <select id="producto-disponibilidad" name="disponibilidad" required>
-              <option value="disponible">Disponible</option>
-              <option value="agotado">Agotado</option>
-              <option value="proxima-llegada">Próxima Llegada</option>
-            </select>
-          </div>
-          <div class="form-grupo">
-            <label for="producto-imagen">Imagen del Producto</label>
-            <input type="file" id="producto-imagen" name="imagen" accept="image/*" />
-          </div>
-          
-          <!-- Campo de descripción -->
-          <div class="form-grupo">
-            <label for="producto-descripcion">Descripción</label>
-            <textarea id="producto-descripcion" name="descripcion" required></textarea>
-          </div>
-          
-          <!-- Campo de características -->
-          <div class="form-grupo">
-            <label for="producto-caracteristicas">Características Técnicas</label>
-            <textarea id="producto-caracteristicas" name="caracteristicas"></textarea>
-          </div>
-          <div class="form-acciones">
-            <button type="submit" class="btn-guardar">Guardar</button>
-            <button type="button" class="btn-cancelar" id="cancelar-producto">Cancelar</button>
-          </div>
-        </form>
       </div>
+      <div class="modal-body" id="detalle-venta-contenido"></div>
     </div>
+  </div>
 
-    <!-- Notificaciones -->
-    <div id="notificacion" class="notificacion"></div>
+  <!-- Notificaciones -->
+  <div id="notificacion" class="notificacion"></div>
 
- 
-  </body>
-     <script src="/frontend/js/script_admi.js"></script>
+  <!-- Scripts -->
+  <script src="/frontend/js/script_admi.js"></script>
+</body>
+
 </html>

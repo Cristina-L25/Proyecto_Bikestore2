@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio - BikeStore</title>
-  <link rel="stylesheet" href="/frontend/static/header_footer.css">
-  <link rel="stylesheet" href="/frontend/static/styles.css">
-  <link rel="stylesheet" href="/frontend/static/modals.css">
-  <link rel="stylesheet" href="/frontend/static/responsive.css">
+  <link rel="stylesheet" href="static/header_footer.css">
+  <link rel="stylesheet" href="static/styles.css">
+  <link rel="stylesheet" href="static/modals.css">
+  <link rel="stylesheet" href="static/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -23,7 +23,7 @@
     <!-- Barra lateral izquierda -->
     <aside class="sidebar-left">
       <div class="motivation-section">
-        <img src="/frontend/img/motivacion.png" alt="Frase Motivacional">
+        <img src="img/motivacion.png" alt="Frase Motivacional">
         <div class="overlay">
           <h2>¡Inspírate y Actúa!</h2>
           <p>"El éxito es la suma de pequeños esfuerzos diarios."</p>
@@ -38,14 +38,14 @@
       <div class="main-banner">
         <div class="banner-slides">
           <div class="banner-slide active">
-            <img src="/frontend/img/img_slider1.jpeg" alt="Banner1" loading="lazy">
+            <img src="img/img_slider1.jpeg" alt="Banner1" loading="lazy">
           </div>
           <div class="banner-slide">
-            <img src="/frontend/img/img_slider2.jpeg" alt="Banner1" loading="lazy">
+            <img src="img/img_slider2.jpeg" alt="Banner1" loading="lazy">
           </div>
           <div class="banner-slide">
             <video autoplay loop muted>
-              <source src="/frontend/img/video_slider3.mp4" type="video/mp4">
+              <source src="img/video_slider3.mp4" type="video/mp4">
             </video>
           </div>
         </div>
@@ -61,38 +61,38 @@
       </div>
 
 
-       <!-- Categorías -->
-       <div class="categories animate">
+      <!-- Categorías -->
+      <div class="categories animate">
         <div class="category-card">
-          <a href="/frontend/catalogo.html">
+          <a href="/frontend/catalogo.html" style="text-decoration: none;">
             <div class="category-image">
-              <img src="/frontend/img/bici_categoria.jpg" alt="Bicicletas" />
+              <img src="img/bici_categoria.jpg" alt="Bicicletas" />
             </div>
             <h3>Bicicletas</h3>
           </a>
         </div>
 
         <div class="category-card">
-          <a href="/frontend/catalogo.html">
+          <a href="/frontend/catalogo.html" style="text-decoration: none;">
             <div class="category-image">
-              <img src="/frontend/img/accesorios_categoria.jpeg" alt="Accesorios" />
+              <img src="img/accesorios_categoria.jpeg" alt="Accesorios" />
             </div>
             <h3>Accesorios</h3>
           </a>
         </div>
 
         <div class="category-card">
-          <a href="/frontend/catalogo.html">
+          <a href="/frontend/catalogo.html" style="text-decoration: none;">
             <div class="category-image">
-              <img src="/frontend/img/repuestos_categoria.jpg" alt="Repuestos y componentes" />
+              <img src="img/repuestos_categoria.jpg" alt="Repuestos y componentes" />
             </div>
             <h3>Repuestos y componentes</h3>
           </a>
         </div>
         <div class="category-card">
-          <a href="/frontend/catalogo.html">
+          <a href="/frontend/catalogo.html" style="text-decoration: none;">
             <div class="category-image">
-              <img src="/frontend/img/ropa_categoria.jpg" alt="Ropa de ciclismo" />
+              <img src="img/ropa_categoria.jpg" alt="Ropa de ciclismo" />
             </div>
             <h3>Ropa de ciclismo</h3>
           </a>
@@ -104,68 +104,131 @@
       <div class="popular-products animate">
         <!-- Producto 1 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-              <img src="ruta-a-imagen-bicicleta-montana.jpg" alt="Bicicleta de Montaña X100">
+            <img src="img_produc_lanz/Bicicleta_de_Montaña_X100.png" alt="Bicicleta de Montaña X100">
           </div>
           <h3 class="product-title">Bicicleta de Montaña X100</h3>
           <p class="product-price">COP $2.500.000</p>
-          <button class="add-to-cart">Agregar al carrito</button>
-      </div>
+          <div class="button-container">
+            <button class="release-button" data-id="1">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
+        </div>
         <!-- Producto 2 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-bicicleta-urbana.jpg" alt="Bicicleta Urbana Z200">
+            <img src="img_produc_lanz/Bicicleta_Urbana_Z200.png" alt="Bicicleta Urbana Z200">
           </div>
           <h3 class="product-title">Bicicleta Urbana Z200</h3>
           <p class="product-price">COP $1.800.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="2">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
         <!-- Producto 3 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-casco.jpg" alt="Casco de Bicicleta Pro">
+            <img src="img_produc_lanz/Casco_de_Bicicleta_Pro.png" alt="Casco de Bicicleta Pro">
           </div>
           <h3 class="product-title">Casco de Bicicleta Pro</h3>
           <p class="product-price">COP $350.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="3">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
         <!-- Producto 4 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-guantes.jpg" alt="Guantes de Ciclismo">
+            <img src="img_produc_lanz/Guantes_de_Ciclismo.png" alt="Guantes de Ciclismo">
           </div>
           <h3 class="product-title">Guantes de Ciclismo</h3>
           <p class="product-price">COP $120.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="4">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
         <!-- Producto 5 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-bicicleta-carretera.jpg" alt="Bicicleta de Carretera R300">
+            <img src="img_produc_lanz/Bicicleta_de_Carretera_R300.png" alt="Bicicleta de Carretera R300">
           </div>
           <h3 class="product-title">Bicicleta de Carretera R300</h3>
           <p class="product-price">COP $2.200.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="5">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
         <!-- Producto 6 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-bicicleta-electrica.jpg" alt="Bicicleta Eléctrica E-Bike">
+            <img src="img_produc_lanz/Bicicleta_Eléctrica_E-Bike.png" alt="Bicicleta Eléctrica E-Bike">
           </div>
           <h3 class="product-title">Bicicleta Eléctrica E-Bike</h3>
           <p class="product-price">COP $3.200.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="6">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
         <!-- Producto 7 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-bicicleta-hibrida.jpg" alt="Bicicleta Híbrida">
+            <img src="img_produc_lanz/Bicicleta_Híbrida.png" alt="Bicicleta Híbrida">
           </div>
           <h3 class="product-title">Bicicleta Híbrida</h3>
           <p class="product-price">COP $2.800.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="7">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
         <!-- Producto 8 -->
         <div class="product-card">
+          <div class="product-overlay"></div>
+          <div class="favorite-container">
+            <i class="favorite-icon far fa-heart"></i>
+          </div>
           <div class="product-image">
-            <img src="ruta-a-imagen-accesorios.jpg" alt="Kit de Accesorios para Bicicleta">
+            <img src="img_produc_lanz/Kit_de_Accesorios_para_Bicicleta.png" alt="Kit de Accesorios para Bicicleta">
           </div>
           <h3 class="product-title">Kit de Accesorios para Bicicleta</h3>
           <p class="product-price">COP $450.000</p>
+          <div class="button-container">
+            <button class="release-button" data-id="8">Agregar al carrito</button>
+            <button class="action-button detail-button">Ver detalles</button>
+          </div>
         </div>
       </div>
     </main>
@@ -173,7 +236,7 @@
     <!-- Barra lateral derecha -->
     <aside class="sidebar-right animate">
       <div class="promotion-section">
-        <img src="/frontend/img/promocion.png" alt="Promoción">
+        <img src="img/promocion.png" alt="Promoción">
         <div class="overlay">
           <h2>¡Gran Promoción!</h2>
           <p>Descuento del 30% en la nueva colección</p>
@@ -193,7 +256,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-bicicleta-electrica-plus.jpg" alt="Bicicleta Eléctrica Plus">
+          <img src="img_produc_lanz/Bicicleta Eléctrica Plus.jpg" alt="Bicicleta Eléctrica Plus">
         </div>
         <div class="release-info">
           <h3 class="release-title">Bicicleta Eléctrica Plus</h3>
@@ -207,7 +270,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-kit-reparacion.jpg" alt="Kit de Reparación Integral">
+          <img src="img_produc_lanz/Kit de Reparación Integral.jpg" alt="Kit de Reparación Integral">
         </div>
         <div class="release-info">
           <h3 class="release-title">Kit de Reparación Integral</h3>
@@ -221,7 +284,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-luces-led.jpg" alt="Luces LED para Bicicleta">
+          <img src="img_produc_lanz/Luces LED para Bicicleta.jpg" alt="Luces LED para Bicicleta">
         </div>
         <div class="release-info">
           <h3 class="release-title">Luces LED para Bicicleta</h3>
@@ -235,7 +298,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-camara-ciclismo.jpg" alt="Cámara de Acción para Ciclismo">
+          <img src="img_produc_lanz/Cámara de Acción para Ciclismo.jpg" alt="Cámara de Acción para Ciclismo">
         </div>
         <div class="release-info">
           <h3 class="release-title">Cámara de Acción para Ciclismo</h3>
@@ -249,7 +312,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-sillin.jpg" alt="Sillín Ergonómico">
+          <img src="img_produc_lanz/Sillín Ergonómico.jpg" alt="Sillín Ergonómico">
         </div>
         <div class="release-info">
           <h3 class="release-title">Sillín Ergonómico</h3>
@@ -263,7 +326,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-guantes-pro.jpg" alt="Guantes Pro para Ciclismo">
+          <img src="img_produc_lanz/Guantes Pro para Ciclismo.jpg" alt="Guantes Pro para Ciclismo">
         </div>
         <div class="release-info">
           <h3 class="release-title">Guantes Pro para Ciclismo</h3>
@@ -277,7 +340,7 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-bicicleta-hibrida-nueva.jpg" alt="Bicicleta Híbrida Nueva">
+          <img src="img_produc_lanz/Bicicleta Híbrida Nueva.jpg" alt="Bicicleta Híbrida Nueva">
         </div>
         <div class="release-info">
           <h3 class="release-title">Bicicleta Híbrida Nueva</h3>
@@ -291,53 +354,50 @@
           <i class="favorite-icon far fa-heart"></i>
         </div>
         <div class="release-image">
-          <img src="ruta-a-imagen-cascos.jpg" alt="Cascos de Ciclismo de Alta Gama">
+          <img src="img_produc_lanz/Cascos de Ciclismo de Alta Gama.jpg" alt="Cascos de Ciclismo de Alta Gama">
         </div>
         <div class="release-info">
           <h3 class="release-title">Cascos de Ciclismo de Alta Gama</h3>
           <p class="release-price">COP $500.000</p>
           <button class="release-button" data-id="16">Agregar al carrito</button>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Sección Nuestras Marcas -->
- <!-- Sección Nuestras Marcas -->
- <section class="our-brands">
-  <h2 class="brands-title">Nuestras Marcas</h2>
-  <div class="brands-carousel">
-    <button class="nav-arrow prev-brand">←</button>
-    <div class="brands-container">
-      <div class="brand-item">
-        <img src="/frontend/img/img_marcas/trek_marca.png" alt="Trek">
-      </div>
-      <div class="brand-item">
-        <img src="/frontend/img/img_marcas/specialized_marca.png" alt="Specialized">
-      </div>
-      <div class="brand-item">
-        <img src="/frontend/img/img_marcas/giant_marca.png" alt="Giant">
-      </div>
-      <div class="brand-item">
-        <img src="/frontend/img/img_marcas/cannondale_marca.png" alt="Cannondale">
-      </div>
-      <div class="brand-item">
-        <img src="/frontend/img/img_marcas/scott_marca.png" alt="Scott">
-      </div>
-      <div class="brand-item">
-        <img src="/frontend/img/img_marcas/orbea_marca.png" alt="Orbea">
+  <section class="our-brands">
+    <h2 class="brands-title">Nuestras Marcas</h2>
+    <div class="brands-carousel">
+      <div class="brands-container">
+        <div class="brand-item">
+          <img src="img/img_marcas/trek_marca.png" alt="Trek">
+        </div>
+        <div class="brand-item">
+          <img src="img/img_marcas/specialized_marca.png" alt="Specialized">
+        </div>
+        <div class="brand-item">
+          <img src="img/img_marcas/giant_marca.png" alt="Giant">
+        </div>
+        <div class="brand-item">
+          <img src="img/img_marcas/cannondale_marca.png" alt="Cannondale">
+        </div>
+        <div class="brand-item">
+          <img src="img/img_marcas/scott_marca.png" alt="Scott">
+        </div>
+        <div class="brand-item">
+          <img src="img/img_marcas/orbea_marca.png" alt="Orbea">
+        </div>
       </div>
     </div>
-    <button class="nav-arrow next-brand">→</button>
-  </div>
-</section>
-
-
+  </section>
 
   <!-- Contenedor para el Footer -->
   <div id="footer-container"></div>
 
   <div id="modals-container"></div>
-  <script type="module" src="/frontend/js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
+
 </body>
 
 </html>
