@@ -503,31 +503,52 @@ router.get('/cart/:userId', verifyToken, async (req, res) => {
 });
 
 // Añadir producto al carrito
-router.post('/cart/:userId', verifyToken, async (req, res) => {
+router.post('/cart/add/:userId', verifyToken, async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { producto_id, producto_nombre, precio, imagen, cantidad } = req.body; // Añade producto_nombre
+    const { producto_id, producto_nombre, precio, imagen, cantidad = 1 } = req.body;
+
+    // Validaciones básicas
+    if (!producto_id || !producto_nombre || !precio) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Datos del producto incompletos'
+      });
+    }
 
     const query = `
       INSERT INTO Carrito 
       (usuario_id, producto_id, producto_nombre, producto_precio, producto_imagen, cantidad)
       VALUES (?, ?, ?, ?, ?, ?)
-      ON DUPLICATE KEY UPDATE cantidad = ?
+      ON DUPLICATE KEY UPDATE cantidad = cantidad + ?
     `;
 
     conexion.query(
       query,
-      [userId, producto_id, producto_nombre, precio, imagen, cantidad, cantidad], // Añade producto_nombre
+      [userId, producto_id, producto_nombre, precio, imagen, cantidad, cantidad],
       (error, resultado) => {
         if (error) {
-          console.error(error);
-          return res.status(500).send(error);
+          console.error('Error en la consulta SQL:', error);
+          return res.status(500).json({ 
+            success: false,
+            error: 'Error en la base de datos',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+          });
         }
-        res.json({ message: 'Producto agregado al carrito', id: resultado.insertId });
+        res.json({ 
+          success: true,
+          message: 'Producto agregado al carrito',
+          cartItemId: resultado.insertId
+        });
       }
     );
   } catch (error) {
-    res.status(500).send(error);
+    console.error('Error en el servidor:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Error en el servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -574,25 +595,27 @@ router.get('/favorites/:userId', verifyToken, async (req, res) => {
 router.post('/favorites/:userId', verifyToken, async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { producto_nombre, precio, imagen } = req.body;
+    const {  producto_id, producto_nombre, precio, imagen } = req.body;
+    
 
     const query = `
-      INSERT INTO Favoritos (usuario_id, producto_nombre, producto_precio, producto_imagen)
-VALUES (?, ?, ?, ?)
-ON DUPLICATE KEY UPDATE producto_precio = ?, producto_imagen = ?
-    `;
+  INSERT INTO Favoritos 
+  (usuario_id, producto_id, producto_nombre, producto_precio, producto_imagen)
+  VALUES (?, ?, ?, ?, ?)
+  ON DUPLICATE KEY UPDATE producto_precio = ?, producto_imagen = ?
+`;
 
-    conexion.query(
-      query,
-      [userId, producto_nombre, precio, imagen, precio, imagen],
-      (error, resultado) => {
-        if (error) {
-          console.error(error);
-          return res.status(500).send(error);
-        }
-        res.json({ message: 'Producto agregado a favoritos', id: resultado.insertId });
-      }
-    );
+conexion.query(
+  query,
+  [userId, producto_id, producto_nombre, precio, imagen, precio, imagen],
+  (error, resultado) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send(error);
+    }
+    res.json({ message: 'Producto agregado a favoritos', id: resultado.insertId });
+  }
+);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -856,10 +879,26 @@ const tablasPermitidas = ['Productos', 'Carrito', 'Favoritos', 'pedidos', 'detal
 
 
 // Obtener todos los registros de una tabla (Solo usuarios autenticados)
-router.get('/:tabla', verifyToken, async (req, res) => {
+// Ruta pública para obtener productos por ID (sin autenticación)
+router.get('/productos/:id', async (req, res) => {
   try {
-    const resultados = await obtenerTodos(req.params.tabla);
-    res.send(resultados);
+    const resultado = await obtenerUno('Productos', req.params.id);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Ruta genérica para otras tablas (requiere autenticación)
+router.get('/:tabla/:id', verifyToken, async (req, res) => {
+  try {
+    // Validar tabla permitida
+    if (!tablasPermitidas.includes(req.params.tabla)) {
+      return res.status(404).json({ error: 'Tabla no encontrada' });
+    }
+    
+    const resultado = await obtenerUno(req.params.tabla, req.params.id);
+    res.send(resultado);
   } catch (error) {
     res.status(500).send(error);
   }

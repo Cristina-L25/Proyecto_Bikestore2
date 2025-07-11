@@ -1,4 +1,9 @@
 // modules/search.js
+
+import { actualizarFavoritoEnBD } from './syncManager.js';
+import { mostrarMensaje } from './ui.js';
+import { agregarAlCarrito, actualizarContadorCarrito } from './cart.js';
+
 export function initSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.querySelector('.search-button');
@@ -102,6 +107,7 @@ async function buscarEnCatalogo(termino) {
         if (productsContainer) {
             productsContainer.innerHTML = `<p>Error al buscar productos: ${error.message}. Intente nuevamente.</p>`;
         }
+        mostrarMensaje('Error al buscar productos. Intente nuevamente.', 'error');
     }
 }
 
@@ -151,6 +157,10 @@ function renderProducts(productos) {
             `
         )
         .join("");
+
+    // Después de renderizar, activar los botones
+    activarBotonesFavoritos();
+    activarBotonesCarrito();
 }
 
 // Función para obtener parámetros de la URL
@@ -172,4 +182,125 @@ export function initSearchFromURL() {
         // Realizar la búsqueda
         buscarEnCatalogo(searchTerm);
     }
+}
+
+// Función para activar botones de favoritos
+async function activarBotonesFavoritos() {
+    const favIcons = document.querySelectorAll(".favorite-icon");
+    
+    favIcons.forEach(icon => {
+        // Verificar estado actual del favorito
+        const card = icon.closest(".product-card");
+        if (card) {
+            const productTitle = card.querySelector(".product-title")?.textContent;
+            const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+            const esFavorito = favoritos.some(item => item.nombre === productTitle);
+            
+            // Actualizar icono según estado
+            icon.classList.toggle("far", !esFavorito);
+            icon.classList.toggle("fas", esFavorito);
+        }
+
+        icon.addEventListener("click", async function(e) {
+            e.preventDefault();
+            const card = this.closest(".product-card");
+            if (card) {
+                const productTitle = card.querySelector(".product-title")?.textContent;
+                const productPrice = card.querySelector(".product-price")?.textContent;
+                const productImage = card.querySelector(".product-image img")?.src;
+                
+                const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+                const index = favoritos.findIndex(item => item.nombre === productTitle);
+                
+                if (index === -1) {
+                    // Agregar a favoritos
+                    const nuevoFavorito = {
+                        nombre: productTitle,
+                        precio: productPrice,
+                        imagen: productImage
+                    };
+                    favoritos.push(nuevoFavorito);
+                    this.classList.remove("far");
+                    this.classList.add("fas");
+                    mostrarMensaje("¡Producto agregado a favoritos!", 'success');
+                    
+                    // Sincronizar con backend si está logueado
+                    await actualizarFavoritoEnBD(nuevoFavorito, 'agregar');
+                } else {
+                    // Quitar de favoritos
+                    const favoritoEliminado = favoritos[index];
+                    favoritos.splice(index, 1);
+                    this.classList.remove("fas");
+                    this.classList.add("far");
+                    mostrarMensaje("Producto eliminado de favoritos", 'success');
+                    
+                    // Sincronizar con backend si está logueado
+                    await actualizarFavoritoEnBD(favoritoEliminado, 'eliminar');
+                }
+                
+                localStorage.setItem("favoritos", JSON.stringify(favoritos));
+                actualizarContadorFavoritos();
+            }
+        });
+    });
+}
+
+// Función para actualizar el contador de favoritos
+function actualizarContadorFavoritos() {
+    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+    const totalFavoritos = favoritos.length;
+    const badge = document.querySelector("#favoritesIcon .badge");
+    
+    if (badge) {
+        badge.textContent = totalFavoritos;
+    }
+}
+
+// Función para activar botones de carrito
+async function activarBotonesCarrito() {
+    const addToCartButtons = document.querySelectorAll(".release-button");
+    
+    addToCartButtons.forEach(button => {
+        button.addEventListener("click", async function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute("data-id");
+            const productCard = this.closest(".product-card");
+            
+            if (!productCard) {
+                console.error("No se encontró la tarjeta del producto");
+                return;
+            }
+            
+            // Obtener datos directamente de la tarjeta del producto
+            const productName = productCard.querySelector(".product-title")?.textContent;
+            const productPriceElement = productCard.querySelector(".product-price");
+            const productImage = productCard.querySelector(".product-image img")?.src;
+            
+            if (!productName || !productPriceElement || !productId) {
+                console.error("Datos del producto incompletos");
+                mostrarMensaje("Error: Datos del producto incompletos", 'error');
+                return;
+            }
+            
+            // Obtener el precio como string (formato: "COP 100,000")
+            const productPrice = productPriceElement.textContent;
+            
+            try {
+                // Usar la función agregarAlCarrito del módulo cart.js
+                await agregarAlCarrito({
+                    id: productId,
+                    nombre: productName,
+                    precio: productPrice, // Mantener formato original
+                    imagen: productImage || '/frontend/img/placeholder-product.jpg'
+                });
+                
+                // Actualizar contador del carrito
+                actualizarContadorCarrito();
+                
+            } catch (error) {
+                console.error("Error al agregar al carrito:", error);
+                mostrarMensaje("Error al agregar producto al carrito", 'error');
+            }
+        });
+    });
 }

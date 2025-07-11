@@ -102,7 +102,7 @@
           </div>
           <div class="categoria ropa">
             <h3>Ropa de Ciclismo</h3>
-           <div id="productos-ropa" class="lista-productos"></div>
+            <div id="productos-ropa" class="lista-productos"></div>
           </div>
         </div>
       </section>
@@ -257,31 +257,31 @@
 
         <!-- Contenido de Productos Más Vendidos -->
         <div id="productos-vendidos" class="ventas-content">
-         <!-- En la sección de Productos Más Vendidos -->
-<div class="filtro-container">
-    <h3>Filtrar por fechas</h3>
-    <div class="filtro-fechas">
-        <div class="campo-fecha">
-            <label for="fecha-inicio-productos">Desde:</label>
-            <input type="date" id="fecha-inicio-productos" name="fecha-inicio-productos">
-        </div>
-        <div class="campo-fecha">
-            <label for="fecha-fin-productos">Hasta:</label>
-            <input type="date" id="fecha-fin-productos" name="fecha-fin-productos">
-        </div>
-        <button id="btn-filtrar-productos" class="btn">
-            <i class="fas fa-filter"></i> Filtrar
-        </button>
-        <!-- Después del botón de Filtrar -->
-<button id="btn-descargar-productos" class="btn">
-  <i class="fas fa-download"></i> Descargar Reporte
-</button>
-<button id="btn-descargar-productos-pdf" class="btn">
-  <i class="fas fa-file-pdf"></i> Descargar Reporte de Venta
-</button>
+          <!-- En la sección de Productos Más Vendidos -->
+          <div class="filtro-container">
+            <h3>Filtrar por fechas</h3>
+            <div class="filtro-fechas">
+              <div class="campo-fecha">
+                <label for="fecha-inicio-productos">Desde:</label>
+                <input type="date" id="fecha-inicio-productos" name="fecha-inicio-productos">
+              </div>
+              <div class="campo-fecha">
+                <label for="fecha-fin-productos">Hasta:</label>
+                <input type="date" id="fecha-fin-productos" name="fecha-fin-productos">
+              </div>
+              <button id="btn-filtrar-productos" class="btn">
+                <i class="fas fa-filter"></i> Filtrar
+              </button>
+              <!-- Después del botón de Filtrar -->
+              <button id="btn-descargar-productos" class="btn">
+                <i class="fas fa-download"></i> Descargar Reporte
+              </button>
+              <button id="btn-descargar-productos-pdf" class="btn">
+                <i class="fas fa-file-pdf"></i> Descargar Reporte de Venta
+              </button>
 
-    </div>
-    <!-- <h3>O filtrar por periodo:</h3>
+            </div>
+            <!-- <h3>O filtrar por periodo:</h3>
     <div class="filtro-periodo">
         <select id="periodo-vendidos">
             <option value="mes">Último mes</option>
@@ -290,8 +290,8 @@
             <option value="anio">Último año</option>
         </select>
     </div> -->
-</div>
-<div class="productos-top-categorias"></div>
+          </div>
+          <div class="productos-top-categorias"></div>
         </div>
       </section>
     </main>
@@ -358,20 +358,12 @@
           <input type="number" id="producto-precio" name="precio" required>
         </div>
         <!-- Mantenemos el mismo campo de stock pero con un atributo data-max -->
-<div class="form-grupo">
-  <label for="producto-stock">Stock</label>
-  <input 
-    type="number" 
-    id="producto-stock" 
-    name="stock" 
-    min="0" 
-    data-max="100" 
-    Valor máximo por defecto
-    value="0" 
-    required
-  >
-  <small id="stock-message">Máximo permitido: 100 unidades</small>
-</div>
+        <div class="form-grupo">
+          <label for="producto-stock">Stock</label>
+          <input type="number" id="producto-stock" name="stock" min="0" data-max="100" Valor máximo por defecto
+            value="0" required>
+          <small id="stock-message">Máximo permitido: 100 unidades</small>
+        </div>
         <div class="form-grupo">
           <label for="producto-disponibilidad">Disponibilidad</label>
           <select id="producto-disponibilidad" name="disponibilidad" required>
@@ -383,19 +375,17 @@
 
 
 
-
         <div class="form-grupo">
-    <input type="hidden" id="imagen-actual" name="imagenActual" value="">
-    
-    <div id="imagen-preview">
-      <!-- Aquí se mostrará la imagen actual al editar -->
-    </div>
-    
-    <label for="producto-imagen">Imagen del producto:</label>
-    <input type="file" id="producto-imagen" name="imagen" accept="image/*">
-    <small>Dejar en blanco para mantener la imagen actual</small>
-  </div>
+          <input type="hidden" id="imagen-actual" name="imagenActual" value="">
 
+          <div id="imagen-preview">
+            <!-- Aquí se mostrará la imagen actual al editar -->
+          </div>
+
+          <label for="producto-imagen">Imagen del producto:</label>
+          <input type="file" id="producto-imagen" name="imagen" accept="image/*">
+          <small>Dejar en blanco para mantener la imagen actual</small>
+        </div>
 
 
         <div class="form-grupo">

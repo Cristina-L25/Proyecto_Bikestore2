@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // if (value.length) queryParams.append(key, value.join(','));
                     if (value.length) {
                         value.forEach(v => queryParams.append(key, v));
-                     }
+                    }
                 }
                 url = `http://localhost:3000/api/catalog/filtrar?${queryParams.toString()}`;
             }
@@ -151,7 +151,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             } else if (groupTitle.includes('Marca')) {
                                 filters.marcas.push(value);
                             } else if (groupTitle.includes('Precio')) {
-                                filters.precios.push(value);
+                                const selectedRadio = group.querySelector('input[type="radio"]:checked');
+                                if (selectedRadio) {
+                                    filters.precios.push(selectedRadio.value.trim());
+                                }
                             }
                         } catch (e) {
                             console.error('Error procesando checkbox:', e);
@@ -177,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Evento para limpiar filtros
     clearBtn.addEventListener("click", () => {
-        document.querySelectorAll('.filters input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.filters input[type="checkbox"], .filters input[type="radio"]').forEach(input => input.checked = false);
         loadProducts();
     });
 

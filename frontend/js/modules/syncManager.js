@@ -1,6 +1,41 @@
-// syncManager.js (nuevo archivo)
 import { apiRequest } from './api.js';
 import { mostrarMensaje } from './ui.js';
+
+// Función para convertir precio con formato a número
+function convertirPrecioANumero(precio) {
+  if (typeof precio === 'number') {
+    return precio;
+  }
+  
+  if (typeof precio === 'string') {
+    // Remover "COP", "$", espacios y convertir puntos de miles a formato numérico
+    let precioLimpio = precio
+      .replace(/COP\s*\$?/gi, '')  // Remover "COP $"
+      .replace(/\$/g, '')          // Remover $
+      .trim();                     // Remover espacios
+    
+    // Si tiene puntos como separadores de miles (ej: 2.500.000)
+    if (precioLimpio.includes('.') && !precioLimpio.includes(',')) {
+      // Contar puntos
+      const puntos = (precioLimpio.match(/\./g) || []).length;
+      
+      // Si hay más de un punto, probablemente son separadores de miles
+      if (puntos > 1) {
+        precioLimpio = precioLimpio.replace(/\./g, '');
+      }
+    }
+    
+    // Si tiene comas como separadores decimales (ej: 2500,50)
+    if (precioLimpio.includes(',')) {
+      precioLimpio = precioLimpio.replace(',', '.');
+    }
+    
+    const numero = parseFloat(precioLimpio);
+    return isNaN(numero) ? 0 : numero;
+  }
+  
+  return 0;
+}
 
 // Función para sincronizar carrito al iniciar sesión
 export async function sincronizarCarrito(userId) {
@@ -22,11 +57,14 @@ export async function sincronizarCarrito(userId) {
     } else {
       // Si hay carrito local, enviarlo al servidor
       for (const item of carritoLocal) {
-        await apiRequest(`http://localhost:3000/api/cart/${userId}`, {
+        const precioNumerico = convertirPrecioANumero(item.precio);
+        
+        await apiRequest(`http://localhost:3000/api/cart/add/${userId}`, {
           method: 'POST',
           body: JSON.stringify({
+            producto_id: item.id,
             producto_nombre: item.nombre,
-            precio: item.precio.replace(/[^\d]/g, ""),
+            precio: precioNumerico,
             imagen: item.imagen,
             cantidad: item.cantidad || 1
           })
@@ -61,11 +99,14 @@ export async function sincronizarFavoritos(userId) {
     } else {
       // Si hay favoritos locales, enviarlos al servidor
       for (const item of favoritosLocal) {
+        const precioNumerico = convertirPrecioANumero(item.precio);
+        
         await apiRequest(`http://localhost:3000/api/favorites/${userId}`, {
           method: 'POST',
           body: JSON.stringify({
+            producto_id: item.id,
             producto_nombre: item.nombre,
-            precio: item.precio.replace(/[^\d]/g, ""),
+            precio: precioNumerico,
             imagen: item.imagen
           })
         });
@@ -90,23 +131,18 @@ export async function actualizarCarritoEnBD(item, accion) {
     const payload = JSON.parse(atob(token.split('.')[1]));
     const userId = payload.id;
 
-    let endpoint = `http://localhost:3000/api/cart/${userId}`;
+    let endpoint = `http://localhost:3000/api/cart/add/${userId}`;
     let method = 'POST';
 
     if (accion === 'agregar' || accion === 'actualizar') {
-      method = accion === 'agregar' ? 'POST' : 'PUT';
+      const precioNumerico = convertirPrecioANumero(item.precio);
       
-      // Ensure precio is a string before attempting to use replace
-      const precioFormatted = typeof item.precio === 'string' 
-        ? item.precio.replace(/[^\d]/g, "") 
-        : String(item.precio);
-        
       await apiRequest(endpoint, {
         method,
         body: JSON.stringify({
           producto_id: item.id,
           producto_nombre: item.nombre,
-          precio: precioFormatted,
+          precio: precioNumerico,
           imagen: item.imagen || '',
           cantidad: item.cantidad || 1
         })
@@ -139,16 +175,21 @@ export async function actualizarFavoritoEnBD(item, accion) {
     let method = 'POST';
 
     if (accion === 'agregar') {
-      // Ensure precio is a string before attempting to use replace
-      const precioFormatted = typeof item.precio === 'string' 
-        ? item.precio.replace(/[^\d]/g, "") 
-        : String(item.precio);
-        
+      const precioNumerico = convertirPrecioANumero(item.precio);
+      
+      // VALIDACIÓN IMPORTANTE: Verificar que el producto_id existe
+      if (!item.id) {
+        console.error('Error: producto_id no encontrado en el item:', item);
+        mostrarMensaje('Error: No se puede agregar el favorito. ID del producto no encontrado.');
+        return false;
+      }
+      
       await apiRequest(endpoint, {
         method,
         body: JSON.stringify({
+          producto_id: item.id,
           producto_nombre: item.nombre,
-          precio: precioFormatted,
+          precio: precioNumerico,
           imagen: item.imagen || ''
         })
       });

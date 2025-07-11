@@ -23,84 +23,33 @@
       <h1 class="checkout-page-title">Finalizar Compra</h1>
 
       <div class="checkout-layout-grid">
-<!-- Sección del formulario de compra -->
-<section class="checkout-form-wrapper">
-  <form id="checkout-form">
-    <!-- Datos del cliente -->
-    <div class="checkout-form-section">
-      <h2 class="checkout-section-title">Información de Contacto</h2>
+        <!-- Sección del formulario de compra -->
+        <section class="checkout-form-wrapper">
+          <form id="checkout-form">
+            <!-- Datos del cliente -->
+            <div class="checkout-form-section">
+              <h2 class="checkout-section-title">Información de Contacto</h2>
+              <div class="checkout-form-group">
+                <label for="checkout-nombre" class="checkout-form-label">Nombre completo</label>
+                <input class="checkout-input" type="text" id="checkout-nombre" name="nombre" required>
+              </div>
+              <div class="checkout-form-group">
+                <label for="checkout-email" class="checkout-form-label">Email</label>
+                <input type="email" class="checkout-input" id="checkout-email" name="email" required>
+              </div>
+              <div class="checkout-form-group">
+                <label for="checkout-telefono" class="checkout-form-label">Teléfono</label>
+                <input type="tel" class="checkout-input" id="checkout-telefono" name="telefono" required>
+              </div>
+            </div>
 
-      <div class="checkout-form-group">
-        <label for="checkout-nombre" class="checkout-form-label">Nombre completo</label>
-       <input
-  type="text"
-  class="checkout-input"
-  id="checkout-nombre"
-  name="nombre"
-  placeholder="Ej: Juan Pérez"
-  pattern="[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,50}"
-  minlength="3"
-  maxlength="50"
-  title="Solo letras y espacios. Mínimo 3, máximo 50 caracteres"
-  required
->
-
-      </div>
-
-      <div class="checkout-form-group">
-        <label for="checkout-email" class="checkout-form-label">Email</label>
-      <input
-  type="email"
-  class="checkout-input"
-  id="checkout-email"
-  name="email"
-  placeholder="correo@ejemplo.com"
-  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-  minlength="5"
-  maxlength="80"
-  title="Debe ser un correo válido de 5 a 80 caracteres"
-  required
->
-
-      </div>
-
-      <div class="checkout-form-group">
-        <label for="checkout-telefono" class="checkout-form-label">Teléfono</label>
-        <input
-          type="tel"
-          class="checkout-input"
-          id="checkout-telefono"
-          name="telefono"
-          placeholder="Ej: 3001234567"
-          pattern="3\d{9}"
-          minlength="10"
-          maxlength="10"
-          inputmode="numeric"
-          title="Debe empezar por 3 y tener 10 dígitos"
-          required
-        >
-      </div>
-    </div>
-
-    <!-- Dirección de envío -->
-    <div class="checkout-form-section">
-      <h2 class="checkout-section-title">Dirección de Envío</h2>
-
-      <div class="checkout-form-group">
-        <label for="checkout-direccion" class="checkout-form-label">Dirección</label>
-        <input
-          type="text"
-          class="checkout-input"
-          id="checkout-direccion"
-          name="direccion"
-          placeholder="Ej: Calle 10 #15-25"
-          minlength="5"
-          maxlength="80"
-          title="Debe tener entre 5 y 80 caracteres"
-          required
-        >
-      </div>
-
+            <!-- Dirección de envío -->
+            <div class="checkout-form-section">
+              <h2 class="checkout-section-title">Dirección de Envío</h2>
+              <div class="checkout-form-group">
+                <label for="checkout-direccion" class="checkout-form-label">Dirección</label>
+                <input type="text" class="checkout-input" id="checkout-direccion" name="direccion" required>
+              </div>
 
               <div class="checkout-form-group">
                 <label for="departamento" class="checkout-form-label">Departamento *</label>
@@ -179,168 +128,51 @@
               </div>
 
               <!-- Campos tarjeta de crédito (ocultos inicialmente) -->
-<!-- Campos tarjeta de crédito (ocultos inicialmente) -->
-<div id="tarjeta-fields" class="checkout-payment-details" style="display: none;">
-  <div class="checkout-form-group">
-    <label for="numero_tarjeta" class="checkout-form-label">Número de Tarjeta</label>
-    <input
-      type="text"
-      class="checkout-input"
-      id="numero_tarjeta"
-      name="numero_tarjeta"
-      placeholder="XXXX XXXX XXXX XXXX"
-      inputmode="numeric"
-      maxlength="19"
-      pattern="(?:\d{4} ?){4}"
-      title="Ingresa 16 dígitos separados opcionalmente por espacios"
-      required
-    >
-  </div>
+              <div id="tarjeta-fields" class="checkout-payment-details" style="display: none;">
+                <div class="checkout-form-group">
+                  <label for="numero_tarjeta" class="checkout-form-label">Número de Tarjeta</label>
+                  <input type="text" class="checkout-input" id="numero_tarjeta" name="numero_tarjeta" placeholder="XXXX XXXX XXXX XXXX">
+                </div>
+                <div class="checkout-form-row">
+                  <div class="checkout-form-group">
+                    <label for="fecha_vencimiento" class="checkout-form-label">Vencimiento (MM/AA)</label>
+                    <input type="text" class="checkout-input" id="fecha_vencimiento" name="fecha_vencimiento" placeholder="MM/AA">
+                  </div>
+                  <div class="checkout-form-group">
+                    <label for="cvv" class="checkout-form-label">CVV</label>
+                    <input type="text" class="checkout-input" id="cvv" name="cvv" placeholder="XXX">
+                  </div>
+                </div>
+                <div class="checkout-form-group">
+                  <label for="nombre_tarjeta" class="checkout-form-label">Nombre en la tarjeta</label>
+                  <input type="text" class="checkout-input" id="nombre_tarjeta" name="nombre_tarjeta">
+                </div>
+              </div>
 
-  <div class="checkout-form-row">
-    <div class="checkout-form-group">
-      <label for="fecha_vencimiento" class="checkout-form-label">Vencimiento (MM/AA)</label>
-  <input
-  type="text"
-  class="checkout-input"
-  id="fecha_vencimiento"
-  name="fecha_vencimiento"
-  placeholder="MM/AA"
-  pattern="(0[1-9]|1[0-2])\/\d{2}"
-  maxlength="5"
-  inputmode="numeric"
-  title="Formato válido: MM/AA (ej. 09/25)"
-  required
->
-    </div>
-    <div class="checkout-form-group">
-      <label for="cvv" class="checkout-form-label">CVV</label>
-      <input
-        type="text"
-        class="checkout-input"
-        id="cvv"
-        name="cvv"
-        placeholder="XXX"
-        pattern="\d{3}"
-        maxlength="3"
-        title="Debe ser un número de 3 dígitos"
-        required
-      >
-    </div>
-  </div>
-
-  <div class="checkout-form-group">
-    <label for="nombre_tarjeta" class="checkout-form-label">Nombre en la tarjeta</label>
-    <input
-      type="text"
-      class="checkout-input"
-      id="nombre_tarjeta"
-      name="nombre_tarjeta"
-      placeholder="Ej: Juan Pérez"
-      pattern="[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,50}"
-      title="Solo letras y espacios (mínimo 3 caracteres)"
-      required
-    >
-  </div>
-</div>
-
-<!-- Campos PSE (ocultos inicialmente) -->
-<div id="pse-fields" class="checkout-payment-details" style="display: none;">
-
-  <!-- Selector de opción: Banco o Billetera -->
-  <div class="checkout-form-group">
-    <label for="pse-opcion" class="checkout-form-label">¿Cómo deseas pagar?</label>
-    <select id="pse-opcion" class="checkout-select">
-      <option value="">Selecciona una opción</option>
-      <option value="banco">Banco</option>
-      <option value="billetera">Billetera digital</option>
-    </select>
-  </div>
-
-<!-- Subpanel: Banco -->
-<div id="pse-banco" style="display: none;">
-  <div class="checkout-form-group">
-    <label for="banco" class="checkout-form-label">Banco</label>
-    <select id="banco" name="banco" class="checkout-select" required>
-      <option value="">Seleccione su banco</option>
-      <option value="bancolombia">Bancolombia</option>
-      <option value="davivienda">Davivienda</option>
-      <option value="bbva">BBVA</option>
-      <option value="bogota">Banco de Bogotá</option>
-    </select>
-  </div>
-
-  <div class="checkout-form-group">
-    <label for="tipo_persona" class="checkout-form-label">Tipo de persona</label>
-    <select id="tipo_persona" name="tipo_persona" class="checkout-select" required>
-      <option value="">Selecciona una opción</option>
-      <option value="natural">Persona Natural</option>
-      <option value="juridica">Persona Jurídica</option>
-    </select>
-  </div>
-
-  <div class="checkout-form-group">
-    <label for="documento" class="checkout-form-label">Número de documento</label>
-    <input
-      type="text"
-      id="documento"
-      name="documento"
-      class="checkout-input"
-      placeholder="Ej: 1234567890"
-      pattern="\d{6,10}"
-      maxlength="10"
-      minlength="6"
-      inputmode="numeric"
-      title="Debe ingresar entre 6 y 12 dígitos numéricos"
-      required
-    >
-  </div>
-
-  <div class="checkout-form-group">
-    <label for="nombre_titular" class="checkout-form-label">Nombre del titular de la cuenta</label>
-    <input
-      type="text"
-      id="nombre_titular"
-      name="nombre_titular"
-      class="checkout-input"
-      placeholder="Ej: Juan Pérez"
-      pattern="[A-Za-zÁÉÍÓÚÑáéíóúñ ]{3,50}"
-      title="Solo letras, mínimo 3 caracteres"
-      required
-    >
-  </div>
-</div>
-
-
-  <!-- Subpanel: Billetera Digital -->
-<div id="pse-billetera" style="display: none;">
-  <div class="checkout-form-group">
-    <label for="billetera" class="checkout-form-label">Billetera Digital</label>
-    <select id="billetera" name="billetera" class="checkout-select" required>
-      <option value="">Selecciona una billetera</option>
-      <option value="nequi">Nequi</option>
-      <option value="daviplata">Daviplata</option>
-    </select>
-  </div>
-
-  <div class="checkout-form-group">
-    <label for="numero_billetera" class="checkout-form-label">Número de celular</label>
-<input
-  type="tel"
-  id="numero_billetera"
-  name="numero_billetera"
-  class="checkout-input"
-  placeholder="Ej: 3001234567"
-  pattern="3\d{9}"
-  maxlength="10"
-  minlength="10"
-  inputmode="numeric"
-  title="Debe ingresar un número de 10 dígitos que comience por 3"
-  required
->
-  </div>
-</div>
-</div>
+              <!-- Campos PSE (ocultos inicialmente) -->
+              <div id="pse-fields" class="checkout-payment-details" style="display: none;">
+                <div class="checkout-form-group">
+                  <label for="banco" class="checkout-form-label">Banco</label>
+                  <select id="banco" name="banco" class="checkout-select">
+                    <option value="">Seleccione su banco</option>
+                    <option value="bancolombia">Bancolombia</option>
+                    <option value="davivienda">Davivienda</option>
+                    <option value="bbva">BBVA</option>
+                    <option value="nequi">Nequi</option>
+                    <option value="daviplta">Daviplata</option>
+                    <option value="popular">Banco Popular</option>
+                    <option value="bogota">Banco de Bogotá</option>
+                  </select>
+                </div>
+                <div class="checkout-form-group">
+                  <label for="tipo_persona" class="checkout-form-label">Tipo de persona</label>
+                  <select id="tipo_persona" name="tipo_persona" class="checkout-select">
+                    <option value="natural">Persona Natural</option>
+                    <option value="juridica">Persona Jurídica</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
             <!-- Notas del pedido -->
             <div class="checkout-form-section">

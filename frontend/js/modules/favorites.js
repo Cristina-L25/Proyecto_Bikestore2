@@ -5,7 +5,53 @@ import { mostrarMensaje } from './ui.js';
 import { actualizarContadorCarrito } from './cart.js'; // Para usarla en agregarFavoritoAlCarrito()
 import { actualizarFavoritoEnBD } from './syncManager.js';
 
-
+/**
+ * Función para extraer el ID del producto desde diferentes fuentes
+ */
+function obtenerProductoId(productoCard) {
+  // Intentar diferentes formas de obtener el ID
+  let productId = null;
+  
+  // 1. Desde el atributo data-id de la card
+  if (productoCard.dataset.id) {
+    productId = productoCard.dataset.id;
+  }
+  
+  // 2. Desde un elemento con data-product-id
+  if (!productId) {
+    const elementWithId = productoCard.querySelector("[data-product-id]");
+    if (elementWithId) {
+      productId = elementWithId.dataset.productId;
+    }
+  }
+  
+  // 3. Desde un input hidden con el id
+  if (!productId) {
+    const hiddenInput = productoCard.querySelector("input[name='product_id'], input[name='id']");
+    if (hiddenInput) {
+      productId = hiddenInput.value;
+    }
+  }
+  
+  // 4. Desde el botón "Agregar al carrito" si tiene data-id
+  if (!productId) {
+    const addButton = productoCard.querySelector(".release-button[data-id]");
+    if (addButton) {
+      productId = addButton.dataset.id;
+    }
+  }
+  
+  // 5. Desde el enlace de la imagen si tiene parámetros
+  if (!productId) {
+    const link = productoCard.querySelector("a[href*='id=']");
+    if (link) {
+      const url = new URL(link.href);
+      productId = url.searchParams.get('id');
+    }
+  }
+  
+  return productId;
+}
 
 /**
  * Activa los íconos de favoritos en las tarjetas y sincroniza el ícono
@@ -49,13 +95,23 @@ export function toggleFavorito(productoCard) {
   const titulo = productoCard.querySelector(".release-title, .product-title").textContent;
   const precio = productoCard.querySelector(".release-price, .product-price").textContent;
   const imagen = productoCard.querySelector(".release-image img, .product-image img")?.src || "";
+  const productId = obtenerProductoId(productoCard); // Usar la función mejorada
   const favIcon = productoCard.querySelector(".favorite-icon");
+
+  // Validar que tenemos el ID del producto
+  if (!productId) {
+    console.error('Error: No se pudo obtener el ID del producto para:', titulo);
+    console.log('Tarjeta del producto:', productoCard);
+    mostrarMensaje('Error: No se puede agregar a favoritos. ID del producto no encontrado.');
+    return;
+  }
 
   const index = favoritos.findIndex(item => item.nombre === titulo);
 
   if (index === -1) {
     // Agregar a favoritos
     const nuevoFavorito = {
+      id: productId,
       nombre: titulo,
       precio: precio,
       imagen: imagen
@@ -123,16 +179,16 @@ export function cargarFavoritosEnModal() {
   favoritos.forEach((producto, index) => {
     const itemDiv = document.createElement("div");
     itemDiv.className = "cart-item";
-     itemDiv.innerHTML = `
+    itemDiv.innerHTML = `
       <div class="item-image">
         <img src="${producto.imagen || 'img/placeholder.jpg'}" alt="${producto.nombre}">
       </div>
       <div class="item-details">
         <h4>${producto.nombre}</h4>
         <p>${producto.precio}</p>
-        <button class="release-button" data-id="${producto.id}">
-                                    <i class="fas fa-shopping-cart"></i> Agregar al carrito
-                                </button>
+        <button class="release-button add-to-cart-btn" data-id="${producto.id}" data-index="${index}">
+          <i class="fas fa-shopping-cart"></i> Agregar al carrito
+        </button>
       </div>
       <button class="remove-item" data-index="${index}">×</button>
     `;
@@ -222,12 +278,15 @@ export function agregarFavoritoAlCarrito(index) {
   }
 
   // Si no existe, lo agregamos con cantidad 1
-  carrito.push({
+  const nuevoItemCarrito = {
+    id: producto.id, // Asegurar que el ID se incluya
     nombre: producto.nombre,
     precio: producto.precio,
     imagen: producto.imagen,
     cantidad: 1
-  });
+  };
+
+  carrito.push(nuevoItemCarrito);
 
   // Guardamos el carrito actualizado
   localStorage.setItem("carrito", JSON.stringify(carrito));
